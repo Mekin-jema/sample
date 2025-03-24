@@ -167,23 +167,78 @@ const Map = () => {
       .addTo(mapInstance.current);
 
 
-    // Handle missing icons
-    mapInstance.current.on("styleimagemissing", (e) => {
-      const missingImageId = e.id;
-      console.log(e)
-      console.log(categories)
-      const category = categories.find(
-        (cat) => cat.icon === missingImageId
-      );
-      if (category && !mapInstance.current.hasImage(missingImageId)) {
-        const img = new Image();
-        // console.log(category.iconUrl)
-        img.src = category.iconUrl;
-        img.onload = () => {
-          mapInstance.current.addImage(missingImageId, img);
-        };
+// Handle missing icons and style them like Google Maps POI icons
+mapInstance.current.on("styleimagemissing", (e) => {
+  const missingImageId = e.id;
+  console.log("Missing icon requested:", missingImageId);
+  
+  const category = categories.find((cat) => cat.icon === missingImageId);
+
+  if (category && !mapInstance.current.hasImage(missingImageId)) {
+    const img = new Image();
+    img.crossOrigin = "anonymous"; // Handle external image sources
+    img.src = category.iconUrl;
+
+    img.onload = () => {
+      // Get current zoom level
+      const zoom = mapInstance.current.getZoom();
+      
+      // Calculate dynamic size based on zoom level
+      // Adjust these values to control the size scaling
+      const maxSize = 500; // Maximum size at highest zoom
+      const minSize = 200; // Minimum size at lowest zoom
+      const zoomThreshold = 16; // Zoom level where size starts decreasing
+      
+      // Calculate size - smaller when zoomed out, larger when zoomed in
+      let canvasSize = maxSize;
+      if (zoom < zoomThreshold) {
+        // Scale down as we zoom out
+        const scaleFactor = (zoom - 10) / (zoomThreshold - 10); // Adjust 10 to your min zoom
+        canvasSize = minSize + (maxSize - minSize) * Math.max(0, scaleFactor);
       }
-    });
+
+      const canvas = document.createElement("canvas");
+      canvas.width = canvasSize;
+      canvas.height = canvasSize;
+      const ctx = canvas.getContext("2d");
+
+      // Draw Google Maps style background (pin look)
+      ctx.beginPath();
+      ctx.arc(canvasSize / 2, canvasSize / 2, canvasSize / 2 - 8, 0, Math.PI * 2);
+      ctx.fillStyle = "#fff"; // white circle background
+      ctx.shadowColor = "rgba(0, 0, 0, 0.2)";
+      ctx.shadowBlur = 10;
+      ctx.fill();
+      ctx.closePath();
+
+      // Draw the actual icon image centered
+      const padding = canvasSize * 0.1; // Make padding proportional to size
+      ctx.shadowBlur = 0; // Remove shadow for the icon itself
+      ctx.drawImage(
+        img, 
+        padding, 
+        padding, 
+        canvasSize - padding * 2, 
+        canvasSize - padding * 2
+      );
+
+      // Optional: Add a subtle border
+      ctx.beginPath();
+      ctx.arc(canvasSize / 2, canvasSize / 2, canvasSize / 2 - 8, 0, Math.PI * 2);
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = "#cbd5e1"; // soft border color
+      ctx.stroke();
+      ctx.closePath();
+
+      // Add the styled icon to the map
+      mapInstance.current.addImage(missingImageId, {
+        width: canvasSize,
+        height: canvasSize,
+        data: ctx.getImageData(0, 0, canvasSize, canvasSize).data
+      });
+    };
+  }
+});
 
 
     // Add geolocation control
@@ -360,18 +415,18 @@ const Map = () => {
     )}
 
     <div className="absolute top-0 left-0 p-2 flex border-gray-300 bg-transparent z-10 items-center ">
-    <SidebarTrigger className="ml-2 dark:bg-[#020817] dark:text-white" />
+    <SidebarTrigger className="ml-2 " />
       {toggleGeocoding ? (
         <AddressBox route={route} map={map} setToggleGeocoding={setToggleGeocoding}/>
       ) : (
         <GeocodingInput map={map} setToggleGeocoding={setToggleGeocoding} />
       )}
     </div>
-    <div className="absolute flex top-[70px]  sm:top-[60px] lg:top-[15px] items-center overflow-x-auto no-scrollbar right-0 w-[650px] max-w-full scrollbar-hidden scrollbar-thumb-transparent scrollbar-track-transparent">
+    <div className="absolute flex top-[70px]  sm:top-[60px] lg:top-[15px] items-center overflow-x-auto no-scrollbar right-0 w-[700px] max-w-full scrollbar-hidden scrollbar-thumb-transparent scrollbar-track-transparent">
       {/* Left Scroll Button */}
       <button
         onClick={() => scroll("left")}
-        className="absolute left-0 z-20 bg-white text-black  shadow-md p-2 rounded-full hidden sm:flex"
+        className="absolute left-[-1] z-20 bg-white text-black  shadow-md p-2 rounded-full hidden sm:flex"
       >
         <ChevronLeft size={20} />
       </button>
@@ -379,7 +434,7 @@ const Map = () => {
       {/* Scrollable Categories */}
       <div
         ref={scrollRef}
-        className="flex  space-x-2 p-2 border-b border-gray-300 bg-transparent z-10 sm:flex-nowrap w-[500px] md:w-full"
+        className="flex  space-x-2 p-2 border-b border-gray-300 bg-transparent z-10 sm:flex-nowrap w-[560px] md:w-full"
         style={{ scrollBehavior: "smooth", whiteSpace: "nowrap" }}
       >
         {categories.map((category) => (

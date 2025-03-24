@@ -14,6 +14,7 @@ import { NavUser } from "@/components/navbar/header-user";
 import { Search } from "@/components/navbar/search";
 import { DarkModeToggle } from "@/components/navbar/toggle-theme";
 import { Header } from "@/components/navbar/main-header";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
 const initialClients = [
   {
@@ -151,7 +152,7 @@ const ApiKeyManager = () => {
   });
 
   return (
-    <div className="rounded-lg shadow-md p-5 w-full  mx-auto">
+    <Card className="rounded-lg shadow-md  ">
        <Header>
                   {/* <TopNav links={topNav} /> */}
                   <div className="ml-auto flex items-center space-x-4">
@@ -161,9 +162,12 @@ const ApiKeyManager = () => {
                   </div>
                 </Header>
       <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-bold">API Key Manager</h1>
+        <CardHeader className="text-2xl font-bold">API Key Manager</CardHeader>
         <Button onClick={handleGenerateKey} className="bg-[#00432f]"><Plus width={5} height={5}/>Generate API Key</Button>
       </div>
+      <CardContent>
+
+    
       <Input
         placeholder="Search by Name or Domain"
         value={search}
@@ -190,7 +194,8 @@ const ApiKeyManager = () => {
           ))}
         </TableBody>
       </Table>
-    </div>
+      </CardContent>
+    </Card>
   );
 };
 

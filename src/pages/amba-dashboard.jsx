@@ -34,14 +34,14 @@ const topNav = [
 
 export default function DashboardMainPage() {
   return (
-    <SearchProvider>
-      <SidebarProvider className="dark:bg-[#16423C] custom:bg-[#16423C] ">
-        <AppSidebar />
-        <SidebarInset className=" rounded-[25px]  mt-[12px] ">
+    <SearchProvider className>
+      <SidebarProvider className="dark:bg-[#16423C] p-3  ">
+        <AppSidebar  />
+        <SidebarInset className="ml-3  ">
           {/* <Header /> */}
      
           {/* <newHeader /> */}
-          <div className="rounded-[25px] dark:bg-[#021815]">
+          <div className=" dark:bg-[#021815] rounded-xl">
 
           <Outlet />
           </div>

@@ -3,7 +3,9 @@ import {
   Hotel,
   ShoppingCart,
 
+
   Fuel,
+  ParkingSquare,
 } from "lucide-react";
 import googleMapIcon from "google-maps-icons";
 const options = { scale: 2, color: "800000" };
@@ -35,7 +37,7 @@ const categories = [
   {
     name: "Parks",
     tag: "leisure=park",
-    IconComponent: Hotel, // Store the icon component
+    IconComponent: ParkingSquare, // Store the icon component
     icon: "park",
     iconUrl: parking,
   },

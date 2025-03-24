@@ -1,27 +1,29 @@
 import maplibregl from "maplibre-gl";
 import getPlaceNameFromCoordinates from "../api/getPlaceFromCoordinates";
 
-let markers = []; // Array to store marker instances
+let markers = []; // Store marker instances
 
-/**
- * Adds a route layer with draggable markers for waypoints.
- *
- * @param {Object} map - Maplibre GL map instance.
- * @param {string} color - Line color for the route.
- * @param {Array} geometry - Array of [lng, lat] coordinates representing the route.
- * @param {string} name - Unique name for the route layer.
- * @param {number} thickness - Thickness of the route line.
- * @param {Function} setWaypoints - Function to update the waypoints state.
- * @param {Array} waypoints - Array of waypoints with { placeName, longitude, latitude }.
- *
- *
- */
-let data = "";
-
+// Helper function to fetch place name
 const getLocation = async (lngLat) => {
-  data = await getPlaceNameFromCoordinates(lngLat);
+  try {
+    return await getPlaceNameFromCoordinates(lngLat);
+  } catch (error) {
+    console.error("Reverse geocoding failed:", error);
+    return `${lngLat.lng}, ${lngLat.lat}`;
+  }
 };
 
+/**
+ * Adds a route layer with draggable markers styled like Google Maps
+ * @param {Object} map - Maplibre GL map instance
+ * @param {string} color - Route line color
+ * @param {Array} geometry - Array of [lng, lat] coordinates
+ * @param {string} name - Unique route layer name
+ * @param {number} thickness - Route line thickness
+ * @param {Function} setWaypoints - State updater for waypoints
+ * @param {Array} waypoints - Array of waypoint objects
+ * @param {Function} dispatch - Redux dispatch or state function
+ */
 export const addRouteLayer = (
   map,
   color,
@@ -32,13 +34,11 @@ export const addRouteLayer = (
   waypoints,
   dispatch
 ) => {
-  // Remove existing route layer if present
-  if (map.getLayer(name)) {
-    map.removeLayer(name);
-  }
+  // Clean up previous layers and sources
+  if (map.getLayer(name)) map.removeLayer(name);
   if (map.getSource(name)) map.removeSource(name);
 
-  // Add new route layer
+  // Add new GeoJSON source for the route
   map.addSource(name, {
     type: "geojson",
     data: {
@@ -50,6 +50,7 @@ export const addRouteLayer = (
     },
   });
 
+  // Add styled route line (Google Maps like)
   map.addLayer({
     id: name,
     type: "line",
@@ -59,55 +60,72 @@ export const addRouteLayer = (
       "line-cap": "round",
     },
     paint: {
-      "line-color": color,
-      "line-width": thickness,
+      "line-color": color || "#4285F4",   // Google Maps blue
+      "line-width": thickness || 6,
+      "line-opacity": 0.8,
     },
   });
 
-  // Clear existing markers
+  // Remove any existing markers
   markers.forEach((marker) => marker.remove());
-  markers = []; // Reset markers array
+  markers = [];
 
-  // Add draggable markers for each waypoint
+  // Loop through waypoints and create draggable markers
   waypoints.forEach((waypoint, index) => {
     const isStart = index === 0;
     const isEnd = index === waypoints.length - 1;
 
+    // Google-like marker colors
+    const markerColor = isStart
+      ? "#34A853"   // Green for start
+      : isEnd
+      ? "#EA4335"   // Red for end
+      : "#F9AB00";  // Yellow for middle points
+
+    // Create draggable marker
     const marker = new maplibregl.Marker({
-      color: isStart ? "green" : isEnd ? "red" : "#0074D9", // Start: Green, End: Red, Others: Blue
+      color: markerColor,
       draggable: true,
     })
       .setLngLat([waypoint.longitude, waypoint.latitude])
       .addTo(map);
 
-    markers.push(marker); // Store the marker instance
+    // Add shadow and circle effect for Google Maps vibe
+    const el = marker.getElement();
+    el.style.boxShadow = "0 2px 6px rgba(0, 0, 0, 0.3)";
+    el.style.borderRadius = "50%";
+    el.style.width = "32px";
+    el.style.height = "32px";
 
-    // Handle marker dragging
+    // Store marker instance
+    markers.push(marker);
 
-    marker.on("dragend", () => {
+    // Handle dragging
+    marker.on("dragend", async () => {
       const lngLat = marker.getLngLat();
-      const updatedWaypoints = [...waypoints];
-      getLocation(lngLat);
-      console.log(data);
 
+      // Reverse geocode to get updated place name
+      const placeName = await getLocation(lngLat);
+
+      // Update the waypoints array
+      const updatedWaypoints = [...waypoints];
       updatedWaypoints[index] = {
-        placeName: data || `${(lngLat.lng, lngLat.lat)}`, // Keep the original name
+        placeName,
         longitude: lngLat.lng,
         latitude: lngLat.lat,
       };
+
+      // Update the waypoints state
       dispatch(setWaypoints(updatedWaypoints));
 
-      // Update the route with new waypoints
+      // Update the route line with new coordinates
       const source = map.getSource(name);
       if (source) {
         source.setData({
           type: "Feature",
           geometry: {
             type: "LineString",
-            coordinates: updatedWaypoints.map((point) => [
-              point.longitude,
-              point.latitude,
-            ]),
+            coordinates: updatedWaypoints.map((wp) => [wp.longitude, wp.latitude]),
           },
         });
       }

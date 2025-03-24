@@ -46,7 +46,7 @@ export default function GeocodingInput({ map, setToggleGeocoding }) {
           value={inputValue}
           onChange={handleChange}
           placeholder="Search Ambalay Maps"
-          className="w-full py-3 shadow-lg pl-5 pr-12 border rounded-full dark:text-white dark:bg-gray-700 text-black  focus:outline-none  transition-all"
+          className="w-full py-3 shadow-lg pl-5 pr-12 border rounded-full text-black  focus:outline-none  transition-all"
         />
 
         {/* Search Icon */}
@@ -61,7 +61,7 @@ export default function GeocodingInput({ map, setToggleGeocoding }) {
 
         {/* Suggestions Dropdown */}
         {suggestions.length > 0 && (
-          <ul className="absolute left-0  w-[99.999%] dark:text-white dark:bg-gray-700 text-white bg-white  shadow-lg z-0 rounded-t-xl ">
+          <ul className="absolute left-0  w-[99.999%]    bg-white  shadow-lg z-0 rounded-t-xl ">
             {suggestions.map((suggestion, idx) => (
               <li
                 key={idx}

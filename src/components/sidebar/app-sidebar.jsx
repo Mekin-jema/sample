@@ -12,9 +12,9 @@ import { useSidebar } from "@/components/ui/sidebar"; // Ensure this path is cor
 
 export function AppSidebar({ ...props }) {
   const { state } = useSidebar(); // Get sidebar state (expanded or collapsed)
-
+  console.log(state)
   return (
-    <Sidebar collapsible="icon" {...props}  className="dark:bg-[#021815] bg-[#16423C] text-white rounded-[20px] ml-[19px] mt-[12px] mr-[23px] w-[223px] ">
+    <Sidebar collapsible="icon" {...props}  className="dark:bg-[#021815] bg-[#16423C] text-white m-3 rounded-xl ">
       {/* Conditionally render logo only when sidebar is expanded */}
       {state !== "collapsed" ? (
         <div className="flex justify-center items-center">
