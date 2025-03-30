@@ -9,7 +9,6 @@ const getPlaceNameFromCoordinates = async (lngLat) => {
     }
 
     const data = await response.json(); // Parse the response as JSON
-    console.log(data);
     const placeName =
       data?.address?.city ||
       data?.address?.town ||
@@ -20,7 +19,6 @@ const getPlaceNameFromCoordinates = async (lngLat) => {
       data?.address?.country ||
       null;
 
-    console.log("Place Name:", placeName);
     return placeName; // Return the extracted place name
   } catch (error) {
     console.error("Error fetching place name:", error);

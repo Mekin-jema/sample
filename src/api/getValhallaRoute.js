@@ -6,7 +6,6 @@ export const getDefaultRoute = async (waypoints) => {
     lon: waypoint.longitude,
   }));
 
-  // console.log("Locations for route request:", locations);
 
   // Prepare the route request
   const routeRequest = {
@@ -29,7 +28,6 @@ export const getDefaultRoute = async (waypoints) => {
     }
 
     const data = await response.json(); // Await response.json()
-    console.log("Route Data:", data);
     return data;
   } catch (error) {
     console.error("There was an error while fetching the route:", error);

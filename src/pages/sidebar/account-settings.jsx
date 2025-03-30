@@ -74,7 +74,6 @@ export const AccountSettings = () => {
       return;
     }
 
-    console.log("Form submitted:", formData);
     // Add API call or submission logic here
   };
 

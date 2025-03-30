@@ -19,7 +19,6 @@ const POIFilter = ({ setShowFilterPopup, setShowCategoryDetailPopup }) => {
     general: false,
   });
 
-  console.log(filters);
   const toggleSwitch = (key) => {
     setFilters((prev) => ({ ...prev, [key]: !prev[key] }));
   };

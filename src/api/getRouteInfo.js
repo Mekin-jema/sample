@@ -4,7 +4,6 @@ export const getRouteInfo = async (waypoints) => {
     const locations = waypoints
       .map((wp) => `${wp.longitude},${wp.latitude}`)
       .join(";"); // Join waypoints into a single string
-
     const osrmUrl = `https://router.project-osrm.org/route/v1/driving/${locations}?overview=false&alternatives=true&steps=true&geometries=geojson`;
 
     // Fetch the route data

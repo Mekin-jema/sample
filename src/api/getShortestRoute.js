@@ -1,5 +1,7 @@
 export const getShortestRoute = async (waypoints) => {
+  console.log("shortest route", waypoints);
   try {
+    
     // Construct OSRM URL with multiple waypoints
     const locations = waypoints
       .map((wp) => `${wp.longitude},${wp.latitude}`)

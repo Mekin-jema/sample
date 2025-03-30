@@ -9,7 +9,6 @@ const fetchTrafficData = async () => {
     const data = await response.json();
     return data;
     // setTrafficData(data);
-    // console.log(data);
   } catch (error) {
     console.error("Error fetching traffic data:", error);
   } finally {

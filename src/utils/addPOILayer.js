@@ -1,12 +1,12 @@
 // Function to add Points of Interest (POI) layer to the map
 export const addPOILayerToMap = (map, pois) => {
-  console.log('Adding POIs:', pois);
 
   // Remove existing POI layer and source if present
   if (map.getSource('pois')) {
     map.removeLayer('poi-layer');
     map.removeSource('pois');
   }
+  console.log(pois)
 
   // Define the GeoJSON source for POIs
   map.addSource('pois', {
@@ -34,7 +34,7 @@ export const addPOILayerToMap = (map, pois) => {
     source: 'pois',
     layout: {
       'icon-image': ['get', 'icon'],             // Uses icon property
-      'icon-size': 0.1, 
+      'icon-size': 0.075, 
                           // Adjust for better visibility (like Google Maps)
       'icon-allow-overlap': true,               // Avoid hiding overlapping icons
       'text-field': ['get', 'name'],            // Show POI name (optional)

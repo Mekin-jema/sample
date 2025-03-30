@@ -55,8 +55,9 @@ export default function AddressInput({
   const queryPlaces = async (query) => {
     if (query) {
       const res = await getPlaces(query);
-      if (res && res.features) {
-        setSuggestions(res.features);
+      console.log(res)
+      if (res) {
+        setSuggestions(res);
       }
     }
   };
@@ -85,15 +86,21 @@ export default function AddressInput({
    * @param {string} suggestion.place_name - The name of the place.
    * @param {number[]} suggestion.center - The coordinates of the place.
    */
-  const handleSelectSuggestion = ({ place_name, center }) => {
-    const address = {
-      placeName: place_name,
-      longitude: center[0],
-      latitude: center[1],
-    };
-    setAddress(address); // Update parent state
-    setSuggestions([]); // Clear suggestions
-    setInputValue(place_name); // Update input value
+  const handleSelectSuggestion = (suggestion) => {
+  const {lat,lon,name,display_name} = suggestion;
+
+
+
+  const address = {
+    placeName: display_name,
+    longitude: lat,
+    latitude: lon,
+  };
+  setAddress(address); // Update parent state
+  
+
+    setSuggestions([]);
+    setInputValue(display_name);
   };
   return (
     <div className="relative p-2 w-full flex items-center gap-1 ml-[30px] dark:bg-[#020817] bg-white dark:text-white text-black">
@@ -127,7 +134,7 @@ export default function AddressInput({
               setInputValue("");
               setSuggestions([]);
             }}
-            className="absolute right-7 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-red-500"
+            className="absolute right-14 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-red-500"
           >
             <X className="w-5 h-5" />
           </button>
@@ -135,21 +142,20 @@ export default function AddressInput({
   
         {/* Suggestions Dropdown */}
         {suggestions.length > 0 && (
-          <ul
-            className="absolute left-0 w-full bg-white border border-gray-300 rounded-lg shadow-md max-h-40 overflow-y-auto z-50"
-            style={{ top: "100%" }}
-          >
+          <ul className="absolute left-0 w-[99.999%] z-50 bg-white shadow-lg rounded-t-xl">
             {suggestions.map((suggestion, idx) => (
+            
               <li
                 key={idx}
                 onClick={() => handleSelectSuggestion(suggestion)}
-                className="px-4 py-2 text-sm text-gray-800 cursor-pointer hover:bg-gray-100"
+                className="px-4 py-2 text-sm text-gray-700 cursor-pointer hover:bg-gray-100 transition-colors"
               >
-                {suggestion.place_name}
+                {suggestion.display_name}
               </li>
             ))}
           </ul>
         )}
+        
       </div>
   
       {/* Delete Waypoint Button */}
