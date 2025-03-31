@@ -7,17 +7,10 @@ import {
   CardTitle,
   CardDescription,
   CardContent,
-  CardFooter,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
-import { Separator } from "@/components/ui/separator";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
-// Import assets
-import OriginStep from "../assets/images/origin_step.svg";
-import DestinationStep from "../assets/images/destination_step.svg";
+
 import { DIRECTION_ARROWS } from "../constants/TurnByTurnArrows";
 
 // Text-to-Speech Initialization
@@ -79,10 +72,10 @@ const RenderDirectionDetail = ({ map, route }) => {
   };
 
   return (
-    <Card className="z-20 flex flex-col shadow-lg  rounded-lg dark:text-white text-black dark:bg-[#020817] bg-white w-full">
+    <Card className="z-20 flex flex-col shadow-lg  rounded-lg  w-full">
       <CardHeader className="p-4 border-b">
-        <CardTitle className="text-lg font-semibold">via Africa Venue</CardTitle>
-        <CardDescription className="text-sm text-gray-500">
+        <CardTitle className="text-lg font-semibold">Via Africa Venue</CardTitle>
+        <CardDescription className="text-sm text-gray-300">
           <span>{((route?.duration || 0) / 60)?.toFixed(2)} min</span> (
           {((route?.distance || 0) / 1000)?.toFixed(2)} km)
         </CardDescription>
@@ -91,11 +84,11 @@ const RenderDirectionDetail = ({ map, route }) => {
         <ScrollArea className="h-[400px]">
           <div className="divide-y">
             {/* Origin Step */}
-            <div className="py-4 hover:cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+            <div className="py-4 hover:cursor-pointer transition-colors">
               <div className="flex items-center gap-2 mb-1 px-4">
                 <span className="text-sm font-semibold">{steps[0]?.name}</span>
               </div>
-              <span className="text-sm px-4">{steps[0]?.distance} m</span>
+              <span className="text-sm px-4">{steps[0]?.distance}m </span>
             </div>
 
             {/* Intermediate Steps */}
@@ -105,7 +98,7 @@ const RenderDirectionDetail = ({ map, route }) => {
               return (
                 <div
                   key={idx}
-                  className={`py-4 hover:cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors ${
+                  className={`py-4 hover:cursor-pointertransition-colors ${
                     waypoints.some(
                       (wp) =>
                         wp.latitude === step.maneuver.location[1] &&
@@ -117,7 +110,7 @@ const RenderDirectionDetail = ({ map, route }) => {
                   onClick={() => handleStepClick(step)}
                 >
                   <div className="flex items-center gap-2 mb-1 px-4">
-                    <span className="dark:text-white text-black rounded-full p-1">
+                    <span className=" rounded-full p-1">
                       <img
                         src={DIRECTION_ARROWS[step.maneuver.modifier]}
                         alt="Step icon"
@@ -132,11 +125,9 @@ const RenderDirectionDetail = ({ map, route }) => {
             })}
 
             {/* Destination Step */}
-            <div className="py-4 hover:cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+            <div className="py-4 hover:cursor-pointer  transition-colors">
               <div className="flex items-center gap-2 mb-1 px-4">
-                <Avatar className="w-6 h-6">
-                  <AvatarFallback>D</AvatarFallback>
-                </Avatar>
+              
                 <span className="text-sm">
                   {steps[steps.length - 1]?.name}
                 </span>

@@ -92,13 +92,13 @@ const Map = () => {
   const [showCategoryDetailPopup, setShowCategoryDetailPopup] = useState(false); // Category detail state
   const [showFilterPopup, setShowFilterPopup] = useState(false); // Filter popup state
   const [toggleGeocoding, setToggleGeocoding] = useState(false); // Geocoding toggle state
-    const [mapStyle, setMapStyle] = useState(variablelStyles[2].url);
+    const [mapStyle, setMapStyle] = useState(variablelStyles[1].url);
   const { state } = useSidebar(); // Get sidebar state (expanded or collapsed)
 
   const dispatch = useDispatch();
   const { waypoints } = useSelector((state) => state.map); // Waypoints from Redux
   const myAPIKey=import.meta.env.VITE_API_KEY; // API key from environment variables
-    const [selectedStyle, setSelectedStyle] = useState(variablelStyles[5].name);
+    const [selectedStyle, setSelectedStyle] = useState(variablelStyles[1].name);
   
 
 
@@ -155,11 +155,10 @@ const Map = () => {
     const satelliteButton = document.createElement("button");
     satelliteButton.innerHTML = "🛰️"; // Satellite emoji
     satelliteButton.onclick = () => {
-      const currentStyle = mapInstance.current.getStyle().name;
       const satelliteStyle = styles.satelite;
-      const defaultStyle = styles.default;
+
       mapInstance.current.setStyle(
-        currentStyle === "Satellite" ? defaultStyle:satelliteStyle
+        satelliteStyle
       );
     };
     layerSwitcher.appendChild(satelliteButton);
@@ -303,16 +302,37 @@ const Map = () => {
   useEffect(() => {
     if (mapInstance.current) {
       mapInstance.current.setStyle(`${mapStyle}?apiKey=${myAPIKey}`);
+      const updateMapLayer=async()=>{
+
+        const optimizeRoute = await getOptimizedRouteWithStops(waypoints);
+        addRouteLayer(
+          map,
+          "#A91CD8",
+          optimizeRoute.trips[0].geometry.coordinates,
+          "route3",
+          8,
+          setWaypoints,
+          waypoints,
+          dispatch
+        );
+      }
+
+      updateMapLayer()
+
     }
   }, [mapStyle]);
 
   // * Fetch and render routes based on waypoints
   useEffect(() => {
+    // console.log("mekin")
+
+    console.log(waypoints)
     if (!map || !waypoints[0].latitude || !waypoints[1].longitude) return;
 
 
     const fetchRoutes = async () => {
       const coordinates = waypoints.slice(0, 2);
+      console.log( "mycoordinates",coordinates)
 
 
       try {
@@ -322,6 +342,8 @@ const Map = () => {
             getShortestRoute(coordinates),
             getDefaultRoute(coordinates),
           ]);
+  //  console.log("first")
+          console.log(routeInfo, shortestRoute, valhallaRoute);
 
 
           if (routeInfo?.routes?.length > 0) {
@@ -360,6 +382,7 @@ const Map = () => {
           }
         } else {
           const optimizeRoute = await getOptimizedRouteWithStops(waypoints);
+          console.log("optimizeRoute", optimizeRoute);
           if (optimizeRoute?.trips?.length > 0) {
             addRouteLayer(
               map,
@@ -461,9 +484,10 @@ const Map = () => {
           </div>
         </div>
       )}
+      {/*  */}
    <MapStyles variablelStyles={variablelStyles} selectedStyle={selectedStyle} handleStyleChange ={handleStyleChange}/>
 
-      <div className={`fixed top-0 ${state === "collapsed" ? "md:left-[60px]" : "md:left-[300px]"} left-0 p-2 flex border-gray-300 bg-transparent z-10 items-center`}>
+      <div className={`fixed top-0 ${state === "collapsed" ? "md:left-[60px]" : "md:left-[300px]"} left-0  flex  z-10 items-center `}>
         <SidebarTrigger className="ml-2" />
         {toggleGeocoding ? (
           <AddressBox route={route} map={map} setToggleGeocoding={setToggleGeocoding} />

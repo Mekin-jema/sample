@@ -45,13 +45,13 @@ const Billing = () => {
     <div className=" p-2 min-h-screen  rounded-xl shadow-lg">
 
       {/* Top Stat Cards */}
-      <Card className="  rounded-2xl shadow-xl p-2">
-        <CardContent>
+      <Card className="  rounded-2xl shadow-xl w-full">
+        <CardContent className="w-full h-full">
           <Tabs orientation="vertical" defaultValue="overview" className="space-y-4">
-            <TabsContent value="overview" className="space-y-4">
+            <TabsContent value="overview">
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
                 {mockData.map((item) => (
-                  <Card key={item.id} className=" bg-[#E9EFEC] dark:bg-background  p-2 rounded-xl hover:scale-105 transition-all duration-300 shadow-lg w-full">
+                  <Card key={item.id} className=" bg-[#E9EFEC] dark:bg-background  rounded-xl hover:scale-105 transition-all duration-300 shadow-lg w-full">
                   <div className="flex gap-3 items-center justify-between p-3">
 
                       <p className="text-sm font-semibold inline">{item.title}</p>

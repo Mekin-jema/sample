@@ -65,9 +65,24 @@ export default function AddressInput({
   /**
    * Handle deletion of the current waypoint.
    */
-  const handleDeleteInput = () => {
+  const handleDeleteInput = async() => {
     const updatedWaypoints = waypoints.filter((waypoint, i) => i !== index);
     dispatch(setWaypoints(updatedWaypoints));
+
+
+            const optimizeRoute = await getOptimizedRouteWithStops(waypoints);
+            addRouteLayer(
+              map,
+              "#A91CD8",
+              optimizeRoute.trips[0].geometry.coordinates,
+              "route3",
+              8,
+              setWaypoints,
+              waypoints,
+              dispatch
+            );
+          
+    
   };
 
   /**
@@ -93,8 +108,8 @@ export default function AddressInput({
 
   const address = {
     placeName: display_name,
-    longitude: lat,
-    latitude: lon,
+    longitude: lon,
+    latitude: lat,
   };
   setAddress(address); // Update parent state
   
@@ -103,29 +118,29 @@ export default function AddressInput({
     setInputValue(display_name);
   };
   return (
-    <div className="relative p-2 w-full flex items-center gap-1 ml-[30px] dark:bg-[#020817] bg-white dark:text-white text-black">
+    <div className="relative p-2 w-full flex items-center gap-1 ml-[30px] group">
       {/* Start or End Icon */}
       {index === 0 ? (
         <img src={start} alt="start icon" className="w-4 pb-2 pr-1" />
       ) : (
-        <img src={end} alt="end icon" className="w-4 pb-2 pr-1"/>
+        <img src={end} alt="end icon" className="w-4 pb-2 pr-1" />
       )}
-  
+
       {/* Circular marker and dotted line */}
       {index < waypoints.length - 1 && (
         <div className="absolute w-[50%] top-2/3 left-[3%] h-8 border-l-4 border-dotted border-[#A91CD8] py-2"></div>
       )}
-  
+
       {/* Input Field and Suggestions */}
-      <div className="relative w-full ml-3 ">
+      <div className="relative w-full ml-3">
         <input
           type="text"
           value={inputValue}
           onChange={handleChange}
           placeholder={placeholder}
-          className="w-[280px] py-2 pl-5 pr-8 border dark:text-white dark:bg-gray-700 h-[40px] text-black border-black  rounded-[9px] focus:outline-blue-400 focus:ring-1 focus:ring-blue-200"
+          className="w-[280px] py-2 pl-5 pr-8 border rounded-[9px] dark:text-black"
         />
-  
+
         {/* Clear Input Button */}
         {inputValue && (
           <button
@@ -139,12 +154,11 @@ export default function AddressInput({
             <X className="w-5 h-5" />
           </button>
         )}
-  
+
         {/* Suggestions Dropdown */}
         {suggestions.length > 0 && (
           <ul className="absolute left-0 w-[99.999%] z-50 bg-white shadow-lg rounded-t-xl">
             {suggestions.map((suggestion, idx) => (
-            
               <li
                 key={idx}
                 onClick={() => handleSelectSuggestion(suggestion)}
@@ -155,15 +169,14 @@ export default function AddressInput({
             ))}
           </ul>
         )}
-        
       </div>
-  
+
       {/* Delete Waypoint Button */}
       {waypoints.length > 2 && (
         <button
           type="button"
           onClick={handleDeleteInput}
-          className="dark:text-white text-black rounded-full p-1 ml-2 flex items-center justify-center border-2 font-bold border-black dark:border-white hover:bg-gray-100 dark:hover:bg-gray-800"
+          className="rounded-full p-1 ml-2 flex items-center justify-center border-2 font-bold border-black dark:border-white hover:bg-gray-100 dark:hover:bg-gray-800 opacity-0 group-hover:opacity-100 transition-opacity"
         >
           <X className="w-4 h-4" />
         </button>

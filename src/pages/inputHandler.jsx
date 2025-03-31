@@ -6,11 +6,42 @@ import AddressInput from "../components/Input";
 import RenderDirectionDetail from "./drectionDetail";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { FaCar, FaPlane, FaPlus, FaTimes, FaBicycle, FaTrain, FaBus, FaLocationArrow } from "react-icons/fa"; // React Icons
+import { motion, useAnimation } from "framer-motion";
+import { useEffect } from "react";
+import { Car, Bus, MapPin, X, Bike, Plus } from "lucide-react";
+import { MdDirections, MdDirectionsCarFilled, MdDirectionsTransitFilled, MdDirectionsWalk, MdOutlineAirplanemodeActive } from "react-icons/md";
 
 const AddressBox = ({ route, setToggleGeocoding }) => {
   const dispatch = useDispatch();
   const { waypoints } = useSelector((state) => state.map);
+  const controls = useAnimation();
+
+  useEffect(() => {
+    // Start with the infinite pulse animation
+    controls.start({
+      scale: [1, 1.02, 1],
+      opacity: [0.8, 1, 0.8],
+      transition: {
+        duration: 1.5,
+        repeat: Infinity,
+        ease: "easeInOut"
+      }
+    });
+
+    // After 2 seconds, transition to the final state
+    const timer = setTimeout(() => {
+      controls.start({
+        scale: 1,
+        opacity: 1,
+        transition: {
+          duration: 0.5,
+          ease: "easeOut"
+        }
+      });
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, [controls]);
 
   // Add a new waypoint
   const addWaypoint = () => {
@@ -33,54 +64,91 @@ const AddressBox = ({ route, setToggleGeocoding }) => {
   };
 
   return (
-    <Card className="absolute p-0 left-0 top-0 z-40 w-[408px] h-full rounded-none dark:text-white text-black dark:bg-[#020817] bg-white">
-      <CardContent className="p-0 dark:text-white text-black dark:bg-[#020817] bg-white">
-        <div className="flex items-center p-2 w-full gap-6 ml-[54px]">
-          <Button variant="ghost" size="icon" className="hover:bg-gray-200 dark:hover:bg-gray-700">
-            <FaCar className="h-6 w-6" />
-          </Button>
-          <Button variant="ghost" size="icon" className="hover:bg-gray-200 dark:hover:bg-gray-700">
-            <FaBus className="h-6 w-6" />
-          </Button>
-          <Button variant="ghost" size="icon" className="hover:bg-gray-200 dark:hover:bg-gray-700">
-            <FaBicycle className="h-6 w-6" />
-          </Button>
-          <Button variant="ghost" size="icon" className="hover:bg-gray-200 dark:hover:bg-gray-700">
-            <FaLocationArrow className="h-6 w-6" />
-          </Button>
-          <Button variant="ghost" size="icon" onClick={() => setToggleGeocoding(false)} className="hover:bg-gray-200 dark:hover:bg-gray-700">
-            <FaTimes className="h-6 w-6" />
-          </Button>
-        </div>
+    <Card className="fixed p-0 left-0 top-0 z-40 w-[408px] h-screen rounded-[5px] dark:bg-[#16413B] dark:text-white bg-white text-black overflow-hidden">
+      <motion.div
+        initial={{ x: -500, opacity: 0 }}
+        animate={{ x: 0, opacity: 1 }}
+        exit={{ x: -500, opacity: 0 }}
+        transition={{ duration: 0.5, ease: "easeInOut" }}
+      >
+        <motion.div
+          animate={controls}
+          className="h-full"
+        >
+          <CardContent className="p-0">
+            <div className="flex items-center justify-between p-2 w-full ">
 
-        {waypoints.map((waypoint, index) => (
-          <div key={index} className="flex items-center gap-2 w-full">
-            <AddressInput
-              location={waypoint.placeName}
-              index={index}
-              waypoint={waypoint}
-              setAddress={(address) => updateWaypoint(index, address)}
-              placeholder={index === 0 ? "Starting Address" : `Destination Address ${index}`}
-              className="w-full p-0 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-        ))}
+            <div className="flex items-center p-2 w-full gap-2 ml-[5px] h-full">
+              <Button variant="ghost" className="p-3 hover:bg-gray-200 dark:hover:bg-gray-700">
+                <MdDirections size={1000} />
+              </Button>
+              <Button variant="ghost" className="p-3 hover:bg-gray-200 dark:hover:bg-gray-700">
+                <MdDirectionsCarFilled width={10} height={10} />
+              </Button>
+              <Button variant="ghost" className="p-3 hover:bg-gray-200 dark:hover:bg-gray-700">
+                <MdDirectionsTransitFilled className="text-2xl" />
+              </Button>
+              <Button variant="ghost" className="p-3 hover:bg-gray-200 dark:hover:bg-gray-700">
+                <MdDirectionsWalk className="text-2xl" />
+              </Button>
+              <Button variant="ghost" className="p-3 hover:bg-gray-200 dark:hover:bg-gray-700">
+                <Bike className="text-2xl" />
+              </Button>
+              <Button variant="ghost" className="p-3 hover:bg-gray-200 dark:hover:bg-gray-700">
+                <MdOutlineAirplanemodeActive className="text-3xl" />
+              </Button>
 
-        {waypoints.length >= 2 && waypoints[1].longitude !== null && waypoints[0].latitude !== null && (
-          <div className="flex items-center gap-3 ml-8">
-            <Button variant="outline" size="icon" className="rounded-full  border-2" onClick={addWaypoint}>
-              <FaPlus  />
-            </Button>
-            <span className="text-lg ml-6">Add destination</span>
-          </div>
-        )}
-      </CardContent>
+          
+            </div>
+            <Button variant="ghost" onClick={() => setToggleGeocoding(false)} className="hover:bg-gray-200 dark:hover:bg-gray-700">
+                <X className="text-2xl" />
+              </Button>
+            </div>
+            {waypoints.map((waypoint, index) => (
+              <motion.div 
+                key={index} 
+                className="flex items-center gap-2 w-full"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 + 0.5 }}
+              >
+                <AddressInput
+                  location={waypoint.placeName}
+                  index={index}
+                  waypoint={waypoint}
+                  setAddress={(address) => updateWaypoint(index, address)}
+                  placeholder={index === 0 ? "Starting Address" : `Destination Address ${index}`}
+                  className="w-full p-0 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </motion.div>
+            ))}
 
-      <CardFooter className="p-0 w-full">
-        <div className="w-full">
-          <RenderDirectionDetail route={route} />
-        </div>
-      </CardFooter>
+            {waypoints.length >= 2 && waypoints[1].longitude !== null && waypoints[0].latitude !== null && (
+              <motion.div 
+                className="flex items-center gap-3 ml-8"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: waypoints.length * 0.1 + 0.5 }}
+              >
+                <Button
+                  variant="outline"
+                  className="rounded-full border-2 p-2 flex items-center justify-center"
+                  onClick={addWaypoint}
+                >
+                  <Plus className="text-xl" />
+                </Button>
+                <span className="text-lg ml-6">Add destination</span>
+              </motion.div>
+            )}
+          </CardContent>
+
+          <CardFooter className="p-0 w-full">
+            <div className="w-full">
+              <RenderDirectionDetail route={route} />
+            </div>
+          </CardFooter>
+        </motion.div>
+      </motion.div>
     </Card>
   );
 };

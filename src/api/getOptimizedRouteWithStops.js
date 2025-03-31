@@ -15,7 +15,7 @@ export const getOptimizedRouteWithStops = async (waypoints) => {
     }
 
     const locations = validWaypoints
-      .map((wp) => `${wp.longitude},${wp.latitude}`)
+    .map((wp) => `${wp.longitude},${wp.latitude}`)
       .join(";");
 
     const osrmUrl = `https://router.project-osrm.org/trip/v1/driving/${locations}?source=first&overview=full&geometries=geojson&steps=true`;

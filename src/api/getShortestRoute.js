@@ -4,7 +4,7 @@ export const getShortestRoute = async (waypoints) => {
     
     // Construct OSRM URL with multiple waypoints
     const locations = waypoints
-      .map((wp) => `${wp.longitude},${wp.latitude}`)
+      .map((wp) => `${wp.longitude},${wp.latitude}`) // Convert waypoints to "lat,lon" format
       .join(";"); // Join waypoints into a single string
 
     const osrmUrl = `https://router.project-osrm.org/route/v1/driving/${locations}?overview=full&geometries=geojson`;
@@ -17,6 +17,7 @@ export const getShortestRoute = async (waypoints) => {
 
     // Parse and return the JSON response
     const data = await response.json();
+    console.log("first route", data);
     return data;
   } catch (error) {
     console.error("Error while fetching the route:", error);
