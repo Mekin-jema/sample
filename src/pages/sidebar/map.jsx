@@ -324,17 +324,24 @@ const Map = () => {
 
   // * Fetch and render routes based on waypoints
   useEffect(() => {
-    // console.log("mekin")
-
-    console.log(waypoints)
-    if (!map || !waypoints[0].latitude || !waypoints[1].longitude) return;
-
-
+    // Don't proceed if map isn't loaded or we don't have at least 2 valid waypoints
+    if (!map || waypoints.length < 2) return;
+    
+    // Check if first two waypoints have valid coordinates
+    const hasValidCoordinates = waypoints.slice(0, 2).every(
+      wp => wp.latitude !== null && wp.longitude !== null && !isNaN(wp.latitude) && !isNaN(wp.longitude)
+    );
+    
+    if (!hasValidCoordinates) return;
+  
     const fetchRoutes = async () => {
-      const coordinates = waypoints.slice(0, 2);
-      console.log( "mycoordinates",coordinates)
-
-
+      const coordinates = waypoints.slice(0, 2).filter(
+        wp => wp.latitude !== null && wp.longitude !== null
+      );
+  
+      // Ensure we have at least 2 valid coordinates to calculate a route
+      if (coordinates.length < 2) return;
+  
       try {
         if (waypoints.length <= 2) {
           const [routeInfo, shortestRoute, valhallaRoute] = await Promise.all([
@@ -342,15 +349,11 @@ const Map = () => {
             getShortestRoute(coordinates),
             getDefaultRoute(coordinates),
           ]);
-  //  console.log("first")
-          console.log(routeInfo, shortestRoute, valhallaRoute);
-
-
+  
           if (routeInfo?.routes?.length > 0) {
             setRoute(routeInfo.routes[0]);
           }
-
-
+  
           if (shortestRoute?.routes?.length > 0) {
             addRouteLayer(
               map,
@@ -363,8 +366,7 @@ const Map = () => {
               dispatch
             );
           }
-
-
+  
           if (valhallaRoute?.trip?.legs?.length > 0) {
             const routeGeometry = valhallaRoute.trip.legs.flatMap((leg) =>
               decodePolyline(leg.shape)
@@ -381,8 +383,14 @@ const Map = () => {
             );
           }
         } else {
-          const optimizeRoute = await getOptimizedRouteWithStops(waypoints);
-          console.log("optimizeRoute", optimizeRoute);
+          // For more than 2 waypoints, filter out any invalid ones
+          const validWaypoints = waypoints.filter(
+            wp => wp.latitude !== null && wp.longitude !== null
+          );
+          
+          if (validWaypoints.length < 2) return;
+  
+          const optimizeRoute = await getOptimizedRouteWithStops(validWaypoints);
           if (optimizeRoute?.trips?.length > 0) {
             addRouteLayer(
               map,
@@ -401,8 +409,7 @@ const Map = () => {
         console.error("Error fetching routes:", error.message);
       }
     };
-
-
+  
     fetchRoutes();
   }, [map, waypoints, dispatch]);
 

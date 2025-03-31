@@ -149,7 +149,7 @@ export default function AddressInput({
               setInputValue("");
               setSuggestions([]);
             }}
-            className="absolute right-14 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-red-500"
+            className="absolute right-12 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-red-500"
           >
             <X className="w-5 h-5" />
           </button>
