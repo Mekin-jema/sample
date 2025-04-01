@@ -99,6 +99,7 @@ const Map = () => {
   const { waypoints } = useSelector((state) => state.map); // Waypoints from Redux
   const myAPIKey=import.meta.env.VITE_API_KEY; // API key from environment variables
     const [selectedStyle, setSelectedStyle] = useState(variablelStyles[1].name);
+    const [showPOIs, setShowPOIs] = useState(false); // Track POI visibility
   
 
 
@@ -446,33 +447,38 @@ const Map = () => {
    */
   const handleCategoryClick = async (category) => {
     if (!map || loading) return;
+  
+    // Toggle POIs visibility
+    if (showPOIs) {
+      setShowPOIs(false);
+      setPois([]); // Clear POIs
+      removePOILayerFromMap(map); // Function to remove POIs from map
+      return;
+    }
+  
+    setShowPOIs(true);
     setShowCategoryDetailPopup(true);
-    const icon = category.icon;
     setActiveCategory(category.name);
-
-
+  
     const center = map.getCenter().toArray();
-    const data = await fetchPOIs(category.tag, center, icon);
-
-
-
-    const pois = data.elements.map((element) => ({
+    const data = await fetchPOIs(category.tag, center, category.icon);
+  
+    const fetchedPOIs = data.elements.map((element) => ({
       id: element.id,
       name: element.tags["name:am"] || element.tags.name || "Unknown",
       lat: element.lat || element.center?.lat,
       lng: element.lon || element.center?.lon,
-      icon,
-      cuisine: element.tags.cousine || "",
+      icon: category.icon,
+      cuisine: element.tags.cuisine || "",
       internet_access: element.tags.internet_access || "",
       opening_hours: element.tags.opening_hours || "",
       tourism: element.tags.tourism || "",
       website: element.tags.website || "",
       iconComp: category.IconComponent,
     }));
-    setPois(pois);
-    // setPois(data);
-
-    addPOILayerToMap(map, pois);
+  
+    setPois(fetchedPOIs);
+    addPOILayerToMap(map, fetchedPOIs);
   };
   console.log(pois)
 

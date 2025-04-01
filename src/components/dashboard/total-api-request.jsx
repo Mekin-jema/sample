@@ -175,7 +175,7 @@ const Billing = () => {
             </BarChart>
             <div className="mt-4 text-center">
               <p className="text-3xl font-bold text-green-400">30%</p>
-              <p className="text-sm text-gray-400">Sales performance up by 30% vs last month</p>
+              <p className="text-sm text-gray-400">Request performance up by 30% vs last month</p>
             </div>
           </CardContent>
         </Card>
