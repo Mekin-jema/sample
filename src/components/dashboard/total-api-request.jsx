@@ -168,14 +168,14 @@ const Billing = () => {
             <BarChart width={280} height={200} data={weeklyOverviewData}>
               <XAxis dataKey="name" stroke="#ccc" />
               <YAxis stroke="#ccc" />
-              <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+              <CartesianGrid strokeDasharray="3 3" stroke="#334f33" />
               <RechartsTooltip />
               <Bar dataKey="sales" fill="#3b82f6" barSize={30} radius={[8, 8, 0, 0]} />
               <Line type="monotone" dataKey="sales" stroke="#f472b6" strokeWidth={2} />
             </BarChart>
             <div className="mt-4 text-center">
               <p className="text-3xl font-bold text-green-400">30%</p>
-              <p className="text-sm text-gray-400">Request performance up by 30% vs last month</p>
+              <p className="text-sm ">Request performance up by 30% vs last month</p>
             </div>
           </CardContent>
         </Card>
