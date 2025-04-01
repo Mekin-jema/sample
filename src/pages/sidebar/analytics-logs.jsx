@@ -65,25 +65,25 @@ const AnalyticsLogs = () => {
         <TabsList className="flex space-x-4 border-b">
           <TabsTrigger
             value="analytics"
-            className="data-[state=active]:text-[#00432f] data-[state=active]:font-bold data-[state=active]:border-b-2 data-[state=active]:border-b-[#00432f]"
+            className=" data-[state=active]:font-bold data-[state=active]:border-b-2 data-[state=active]:border-b-[#00432f]"
           >
             Analytics
           </TabsTrigger>
           <TabsTrigger
             value="error-logs"
-            className="data-[state=active]:text-[#00432f] data-[state=active]:font-bold data-[state=active]:border-b-2 data-[state=active]:border-b-[#00432f]"
+            className=" data-[state=active]:font-bold data-[state=active]:border-b-2 data-[state=active]:border-b-[#00432f]"
           >
             Error Logs
           </TabsTrigger>
           <TabsTrigger
             value="geographic-usage"
-            className="data-[state=active]:text-[#00432f] data-[state=active]:font-bold data-[state=active]:border-b-2 data-[state=active]:border-b-[#00432f]"
+            className=" data-[state=active]:font-bold data-[state=active]:border-b-2 data-[state=active]:border-b-[#00432f]"
           >
             Geographic Usage
           </TabsTrigger>
           <TabsTrigger
             value="heatmap"
-            className="data-[state=active]:text-[#00432f] data-[state=active]:font-bold data-[state=active]:border-b-2 data-[state=active]:border-b-[#00432f]"
+            className=" data-[state=active]:font-bold data-[state=active]:border-b-2 data-[state=active]:border-b-[#00432f]"
           >
             Heatmap
           </TabsTrigger>
