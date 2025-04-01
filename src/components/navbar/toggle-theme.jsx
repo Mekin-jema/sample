@@ -18,7 +18,7 @@ export function DarkModeToggle() {
       variant="outline"
       size="icon"
       onClick={toggleTheme}
-      className="border-none"
+  
     >
       {isDarkMode ? (
         <Sun className="h-[1.2rem] w-[1.2rem] transition-all" />
