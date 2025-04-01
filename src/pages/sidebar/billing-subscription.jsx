@@ -204,7 +204,7 @@ const BillingSubscription = () => {
 
       {showAddPaymentMethod && (
         <div className="fixed inset-0  bg-opacity-50 flex items-center justify-center p-4">
-          <Card className="w-full max-w-md dark:bg-slate-300 dark:text-black bg-slate-500 text-white">
+          <Card className="w-full max-w-md">
             <CardHeader>
               <CardTitle>Add Payment Method</CardTitle>
             </CardHeader>
@@ -212,8 +212,8 @@ const BillingSubscription = () => {
               <Input placeholder="Enter Payment Type" value={newPaymentType} onChange={(e) => setNewPaymentType(e.target.value)} />
               <Input placeholder="Enter Payment Details" value={newPaymentDetails} onChange={(e) => setNewPaymentDetails(e.target.value)} />
               <div className="flex justify-end gap-2">
-                <Button variant="" className="dark:text-black bg-slate-400" onClick={() => setShowAddPaymentMethod(false)}>Cancel</Button>
-                <Button variant="" className="dark:text-black bg-slate-400" onClick={handleAddPaymentMethod}>Save</Button>
+                <Button variant="" className="" onClick={() => setShowAddPaymentMethod(false)}>Cancel</Button>
+                <Button variant="" className="" onClick={handleAddPaymentMethod}>Save</Button>
               </div>
             </CardContent>
           </Card>
