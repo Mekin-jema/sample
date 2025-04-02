@@ -1,5 +1,5 @@
 import React from "react";
-import { CommandMenu } from "@/components/navbar/command-menu";
+import { CommandMenu } from "@/pages/dashboard/navbar/command-menu";
 
 const SearchContext = React.createContext(null);
 

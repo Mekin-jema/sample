@@ -1,52 +1,78 @@
+
 // import { AmbaBoard } from "./components";
 import { Navigate, Route, Routes, BrowserRouter } from "react-router-dom";
-import { AccountSettings, ApiClients, Board, Map } from "./pages";
-import AnalyticsLogs from "./pages/sidebar/analytics-logs";
-import Geocoding from "./pages/sidebar/geocoding";
-import RouteOptimization from "./pages/sidebar/route-optimization";
-import MatrixApi from "./pages/sidebar/matrix-api";
-import TeamManagement from "./pages/sidebar/team-management";
-import Documentation from "./pages/sidebar/support-docs";
-import DirectionsApi from "./pages/sidebar/directions-api";
-import BillingSubscription from "./pages/sidebar/billing-subscription";
-import DashboardMainPage from "./pages/amba-dashboard";
-import NavigationInput from "./pages/sidebar/geocoding";
-import LocationCard from "./components/location-card";
+import { AccountSettings, ApiClients, Board, Map } from "./pages/dashboard";
+import AnalyticsLogs from "./pages/dashboard/analytic-logs/analytics-logs";
+import Documentation from "./pages/dashboard/support-docs/support-docs";
+import BillingSubscription from "./pages/dashboard/billing-subscription/billing-subscription";
+import DashboardMainPage from "./pages/dashboard/amba-dashboard";
+import NavigationInput from "./pages/dashboard/geo-coding/geocoding";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Users, { loader as usersLoader } from "./pages/dashboard/team-managment/layout/users";
+import NotFoundError from "./pages/error/404";
+import UserAdd from "./pages/dashboard/team-managment/add/route";
+import UserInvite from "./pages/dashboard/team-managment/invite/route";
+import ForgotPassword from "./pages/auth/forgot-password/route";
+import SignIn from "./pages/auth/sign-in/route";
+import SignUp from "./pages/auth/sign-up/route";
+import Otp from "./pages/auth/otp/route";
 
-const App = () => {
-  return (
-    <>
-      {/* <AmbaBoard /> */}
-      <BrowserRouter>
-        <Routes>
-          <Route path="/map" element={<Map />} />
-          <Route path="/locate" element={<LocationCard/>} />
+const router = createBrowserRouter([
 
-          {/* <Route path="/map" element={<Map />} /> */}
-          <Route path="/dashboard" element={<DashboardMainPage />}>
-            {/* Default route */}
-            <Route index element={<Board />} />
-            <Route path="api-keys" element={<ApiClients />} />
-            <Route path="account-settings" element={<AccountSettings />} />
-            <Route path="support-docs" element={<Documentation />} />
-            <Route path="analytics-logs" element={<AnalyticsLogs />} />
-            <Route path="map" element={<Map />} />
-            <Route
-              path="billing-subscription"
-              element={<BillingSubscription />}
-            />
-            <Route path="geocoding" element={<NavigationInput />} />
-            <Route path="route-optimization" element={<RouteOptimization />} />
-            <Route path="directions-api" element={<DirectionsApi />} />
-            <Route path="matrix-api" element={<MatrixApi />} />
-            <Route path="team-management" element={<TeamManagement />} />
-          </Route>
 
-          <Route path="*" element={<Navigate to="/dashboard" replace />} />
-        </Routes>
-      </BrowserRouter>
-    </>
-  );
-};
+  { path: "/404", element: <NotFoundError /> },
+
+  {
+    path: "/dashboard",
+    element: <DashboardMainPage />,
+    children: [
+      { index: true, element: <Board /> },
+      { path: "api-keys", element: <ApiClients /> },
+      { path: "account-settings", element: <AccountSettings /> },
+      { path: "support-docs", element: <Documentation /> },
+      { path: "analytics-logs", element: <AnalyticsLogs /> },
+      { path: "map", element: <Map /> },
+      , {
+        path: "billing-subscription"
+        , element: <BillingSubscription />
+      },
+      { path: "geocoding", element: <NavigationInput /> },
+      { path: "invite", element: <UserInvite /> },
+      { path: "add", element: <UserAdd /> },
+      {
+        path: "users",
+        element: <Users />,
+        loader: usersLoader,
+
+      }
+      // ... other nested routes
+    ],
+  },
+  {
+    path: "/signin",
+    element: <SignIn />
+  },
+  {
+    path: "/otp",
+    element: <Otp />
+  },
+  {
+    path: "/signup",
+    element: <SignUp />
+  },
+  {
+    path: "/forgot-password",
+    element: <ForgotPassword />
+  },
+
+  {
+    path: "*", element: <Navigate to="/404" replace />,
+  },
+
+]);
+
+function App() {
+  return <RouterProvider router={router} />;
+}
 
 export default App;

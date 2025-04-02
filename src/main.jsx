@@ -5,8 +5,8 @@ import App from "./App.jsx";
 import { Provider } from "react-redux";
 import { persistor, store } from "./Redux/Store.js";
 import { PersistGate } from "redux-persist/integration/react";
-import { ThemeProvider } from "@/components/theme-provider";
-import MapComponent from "./pages/demo";
+import { ThemeProvider } from "@/pages/dashboard/theme-provider";
+// import MapComponent from "./pages/demo";
 
 createRoot(document.getElementById("root")).render(
   // <StrictMode>
