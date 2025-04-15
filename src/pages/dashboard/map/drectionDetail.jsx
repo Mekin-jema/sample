@@ -37,7 +37,9 @@ const speakText = (text) => {
 
 const RenderDirectionDetail = ({ map, route }) => {
   const { waypoints } = useSelector((state) => state.map);
+
   const steps = route?.legs[0]?.steps || [];
+  console.log(steps)
 
   const handleStepClick = (step) => {
     if (map) {

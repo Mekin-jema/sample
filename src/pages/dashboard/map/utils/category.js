@@ -5,21 +5,20 @@ import {
   FaHome, FaBeer, FaClinicMedical, FaTrain, FaSubway, FaPlane, FaBriefcase 
 } from "react-icons/fa";
 
-// Color palette by category type
 const COLORS = {
-  FOOD: '#C0392B',         // Darker red
-  LODGING: '#AD1457',      // Darker pink
-  SHOPPING: '#388E3C',     // Darker green
-  NATURE: '#00897B',       // Darker teal
-  TRANSPORT: '#3F51B5',    // Darker indigo
-  HEALTH: '#7B1FA2',       // Darker purple
-  EDUCATION: '#0288D1',    // Darker blue
-  FITNESS: '#E64A19',      // Darker deep orange
-  CULTURE: '#FFA000',      // Darker amber
-  RELIGION: '#673AB7',     // Darker deep purple
-  ENTERTAINMENT: '#D81B60',// Darker pink
-  BUSINESS: '#607D8B',     // Darker blue grey
-  RESIDENTIAL: '#7CB342',  // Darker light green
+  FOOD: 'rgba(192, 57, 43, 0.5)',         // Faded dark red
+  LODGING: 'rgba(173, 20, 87, 0.5)',      // Faded dark pink
+  SHOPPING: 'rgba(56, 142, 60, 0.5)',     // Faded dark green
+  NATURE: 'rgba(0, 137, 123, 0.5)',       // Faded dark teal
+  TRANSPORT: 'rgba(63, 81, 181, 0.5)',    // Faded indigo
+  HEALTH: 'rgba(123, 31, 162, 0.5)',      // Faded dark purple
+  EDUCATION: 'rgba(2, 136, 209, 0.5)',    // Faded dark blue
+  FITNESS: 'rgba(230, 74, 25, 0.5)',      // Faded deep orange
+  CULTURE: 'rgba(255, 160, 0, 0.5)',      // Faded amber
+  RELIGION: 'rgba(103, 58, 183, 0.5)',    // Faded deep purple
+  ENTERTAINMENT: 'rgba(216, 27, 96, 0.5)',// Faded pink
+  BUSINESS: 'rgba(96, 125, 139, 0.5)',    // Faded blue grey
+  RESIDENTIAL: 'rgba(124, 179, 66, 0.5)', // Faded light green
 };
 
 

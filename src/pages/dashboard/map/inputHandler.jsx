@@ -11,11 +11,12 @@ import { useEffect } from "react";
 import { Car, Bus, MapPin, X, Bike, Plus } from "lucide-react";
 import { MdDirections, MdDirectionsCarFilled, MdDirectionsTransitFilled, MdDirectionsWalk, MdOutlineAirplanemodeActive } from "react-icons/md";
 
-const AddressBox = ({ route, setToggleGeocoding, profile, setProfile }) => {
+const AddressBox = ({ route, setToggleGeocoding, profile, setProfile}) => {
   const dispatch = useDispatch();
   const { waypoints } = useSelector((state) => state.map);
   const controls = useAnimation();
 
+  console.log(route)
   useEffect(() => {
     // Start with the infinite pulse animation
     controls.start({
@@ -64,7 +65,7 @@ const AddressBox = ({ route, setToggleGeocoding, profile, setProfile }) => {
   };
 
   return (
-    <Card className="fixed p-0 left-0 top-0 z-40 w-[408px] h-screen rounded-[5px] dark:bg-[#16413B] dark:text-white bg-white text-black overflow-hidden">
+    <Card className="fixed p-0 left-0 top-0 z-40 w-[430px] h-screen rounded-[5px] dark:bg-[#16413B] dark:text-white bg-white text-black overflow-hidden">
       <motion.div
         initial={{ x: -500, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
@@ -76,56 +77,76 @@ const AddressBox = ({ route, setToggleGeocoding, profile, setProfile }) => {
           className="h-full"
         >
           <CardContent className="p-0">
-            <div className="flex items-center justify-between p-2 w-full ">
+            <div className="flex items-center justify-between p-2 w-full font-sora ">
 
-              <div className="flex items-center p-2 w-full gap-2 ml-[5px] h-full">
-                <Button
-                  variant="ghost"
-                  className={`p-3 hover:bg-gray-200 dark:hover:bg-gray-700 ${profile === "auto" ? "bg-primary text-white" : ""}`}
+              <div className="flex items-center p-2 w-[300px] gap-2 ml-[5px] h-full">
+                <button
+             
+                  title="Car"
+                  className={`p-3 rounded-full  transition-all duration-200  ${profile === "auto"
+                      ? "text-[#A91CD8] "
+                      : " hover:text-[#b8a5be]"
+                    }`}
                   onClick={() => setProfile("auto")}
                 >
-                  <MdDirections />
-                </Button>
-                <Button
-                  variant="ghost"
-                  className={`p-3 hover:bg-gray-200 dark:hover:bg-gray-700 ${profile === "motor_scooter" ? "bg-primary text-white" : ""}`}
+                  <MdDirections className="text-2xl" />
+                </button>
+
+                <button
+             
+                  title="Motor Scooter"
+                  className={`p-3 rounded-full transition-all duration-200 ${profile === "motor_scooter"
+                      ? "  text-[#A91CD8] "
+                      : " hover:text-[#b8a5be]"
+                    }`}
                   onClick={() => setProfile("motor_scooter")}
                 >
-                  <MdDirectionsCarFilled />
-                </Button>
-                <Button
-                  variant="ghost"
-                  className={`p-3 hover:bg-gray-200 dark:hover:bg-gray-700 ${profile === "transit" ? "bg-primary text-white" : ""}`}
-                  onClick={() => setProfile("transit")}
-                >
-                  <MdDirectionsTransitFilled className="text-2xl" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  className={`p-3 hover:bg-gray-200 dark:hover:bg-gray-700 ${profile === "pedestrian" ? "bg-primary text-white" : ""}`}
+                  <MdDirectionsCarFilled  className="text-2xl"/>
+                </button>
+
+                <button
+             
+                  title="Pedestrian"
+                  className={`p-3 rounded-full  transition-all duration-200 ${profile === "pedestrian"
+                      ? "  text-[#A91CD8] "
+                      : " hover:text-[#b8a5be]"
+                    }`}
                   onClick={() => setProfile("pedestrian")}
                 >
                   <MdDirectionsWalk className="text-2xl" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  className={`p-3 hover:bg-gray-200 dark:hover:bg-gray-700 ${profile === "bicycle" ? "bg-primary text-white" : ""}`}
+                </button>
+
+                <button
+             
+                  title="Bicycle"
+                  className={`p-3 rounded-full  transition-all duration-200 ${profile === "bicycle"
+                      ? "  text-[#A91CD8] "
+                      : " hover:text-[#b8a5be]"
+                    }`}
                   onClick={() => setProfile("bicycle")}
                 >
                   <Bike className="text-2xl" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  className={`p-3 hover:bg-gray-200 dark:hover:bg-gray-700 ${profile === "multimodal" ? "bg-primary text-white" : ""}`}
+                </button>
+
+                <button
+             
+                  title="Multimodal"
+                  className={`p-3 rounded-full  transition-all duration-200 ${profile === "multimodal"
+                      ? "  text-[#A91CD8] "
+                      : " hover:text-[#b8a5be]"
+                    }`}
                   onClick={() => setProfile("multimodal")}
                 >
-                  <MdOutlineAirplanemodeActive className="text-3xl" />
-                </Button>
+                  <MdOutlineAirplanemodeActive className="text-2xl" />
+                </button>
               </div>
 
-              <Button variant="ghost" onClick={() => setToggleGeocoding(false)} className="hover:bg-gray-200 dark:hover:bg-gray-700">
-                <X className="text-2xl" />
-              </Button>
+
+              <button  title="Close" onClick={() => setToggleGeocoding(false)}  className={`p-3 rounded-full  transition-all duration-200 
+                   hover:text-[#b8a5be]
+                  `}>
+                <X width={25} height={25} />
+              </button>
             </div>
             {waypoints.map((waypoint, index) => (
               <motion.div
@@ -137,6 +158,7 @@ const AddressBox = ({ route, setToggleGeocoding, profile, setProfile }) => {
               >
                 <AddressInput
                   location={waypoint.placeName}
+             
                   index={index}
                   waypoint={waypoint}
                   setAddress={(address) => updateWaypoint(index, address)}
@@ -153,14 +175,15 @@ const AddressBox = ({ route, setToggleGeocoding, profile, setProfile }) => {
                 animate={{ opacity: 1 }}
                 transition={{ delay: waypoints.length * 0.1 + 0.5 }}
               >
-                <Button
-                  variant="outline"
-                  className="rounded-full border-2 p-2 flex items-center justify-center"
+                < button
+                 
+                  title="Add Destination"
+                  className="rounded-full border-[3px] border-[#A91CD8] dark:border-white   flex items-center justify-center"
                   onClick={addWaypoint}
                 >
-                  <Plus className="text-xl" />
-                </Button>
-                <span className="text-lg ml-6">Add destination</span>
+                  <Plus className="w-5 h-5 text-[#A91CD8]" />
+                </button>
+                <span className="text-lg ml-6 font-sora">Add destination</span>
               </motion.div>
             )}
           </CardContent>

@@ -232,36 +232,37 @@ function drawRoute(map,profile) {
   switch (profile) {
     case "bicycle":
       style.paint = {
-        "line-color": "#1db954",
+        "line-color": "#A91CD8",
         "line-width": 10,
-        "line-dasharray": [1, 1],
+        "line-opacity": 0.6,
       };
       break;
     case "pedestrian":
       style.paint = {
-        "line-color": "#FF9800",
+        "line-color": "#A91CD8",
         "line-width": 10,
-        "line-dasharray": [2, 4],
+        "line-opacity": 0.8,
       };
       break;
     case "motor_scooter":
       style.paint = {
-        "line-color": "#2196F3",
+        "line-color": "#A91CD8",
         "line-width": 10,
+        "line-opacity": 0.7,
       };
       break;
     case "transit":
       style.paint = {
-        "line-color": "#9C27B0",
+        "line-color": "#A91CD8",
         "line-width": 12,
-        "line-opacity": 0.8,
+        "line-opacity": 0.5,
       };
       break;
     case "multimodal":
       style.paint = {
-        "line-color": "#FF4081",
+        "line-color": "#A91CD8",
         "line-width": 10,
-        "line-dasharray": [1, 2],
+        "line-opacity": 0.4,
       };
       break;
     case "auto":
@@ -269,6 +270,7 @@ function drawRoute(map,profile) {
       style.paint = {
         "line-color": "#A91CD8",
         "line-width": 10,
+        "line-opacity": 1.0,
       };
       break;
   }
@@ -302,26 +304,26 @@ function addLayerEvents(map) {
   map.on("mouseenter", "route-layer", () => {
     map.getCanvas().style.cursor = "pointer";
     // You can also modify the layer style to highlight routes on hover
-    map.setPaintProperty("route-layer", "line-color", "#FF6347"); // Highlight on hover
+    // map.setPaintProperty("route-layer", "line-color", "#FF6347"); // Highlight on hover
   });
   
   map.on("mouseleave", "route-layer", () => {
     map.getCanvas().style.cursor = "";
     // Reset the route color
-    map.setPaintProperty("route-layer",    "line-color", "#A91CD8",);
+    // map.setPaintProperty("route-layer",    "line-color", "#A91CD8",);
          
   });
   
   map.on("mouseenter", "points-layer", () => {
     map.getCanvas().style.cursor = "pointer";
     // You can change the point color when hovered
-    map.setPaintProperty("points-layer", "circle-color", "#FF6347");
+    // map.setPaintProperty("points-layer", "circle-color", "#FF6347");
   });
   
   map.on("mouseleave", "points-layer", () => {
     map.getCanvas().style.cursor = "";
     // Reset the point color
-    map.setPaintProperty("points-layer", "circle-color", "#fff");
+    // map.setPaintProperty("points-layer", "circle-color", "#fff");
   });
   
 

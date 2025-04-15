@@ -28,7 +28,7 @@ import { Outlet, useLocation } from "react-router-dom";
 
 export default function DashboardMainPage() {
   return (
-    <SidebarProvider className="dark:bg-[#16423C] p-3 font-sora ">
+    <SidebarProvider className="dark:bg-[#16423C] p-3 dark:pt-1 font-sora ">
         <SearchProvider className>
         <AppSidebar  />
         <SidebarInset className="ml-3  ">

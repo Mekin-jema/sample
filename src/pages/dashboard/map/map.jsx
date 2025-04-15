@@ -28,6 +28,7 @@ import MapStyles from "@/pages/dashboard/map/map-style-popup";
 import { addUpdatedValhalla } from "./utils/add-updated-valhalla";
 import "../../dashboard/map/Popup/style.css"
 import { getRouteInfo } from "./api";
+import { removePOILayerFromMap } from "./utils/remove-poi-layer";
 
 
 const Map = () => {
@@ -244,22 +245,28 @@ const Map = () => {
    */
   const handleCategoryClick = async (category) => {
     if (!map || loading) return;
+  
+    // If the same category is clicked again, toggle it off
+    if (activeCategory === category.name) {
+      setActiveCategory(null);
+      setPois([]);
+      removePOILayerFromMap(map); // 👈 clear previous POIs from the map
+      return;
+    }
+  
+    // Show new category
     setShowCategoryDetailPopup(true);
-    const icon = category.icon;
     setActiveCategory(category.name);
-
-
+  
     const center = map.getCenter().toArray();
-    const data = await fetchPOIs(category.tag, center, icon);
-
-
-
+    const data = await fetchPOIs(category.tag, center, category.icon);
+  
     const pois = data.elements.map((element) => ({
       id: element.id,
       name: element.tags["name:am"] || element.tags.name || "Unknown",
       lat: element.lat || element.center?.lat,
       lng: element.lon || element.center?.lon,
-      icon,
+      icon: category.icon,
       color: category.textColor,
       cuisine: element.tags.cousine || "",
       internet_access: element.tags.internet_access || "",
@@ -268,11 +275,13 @@ const Map = () => {
       website: element.tags.website || "",
       iconComp: category.IconComponent,
     }));
+  
     setPois(pois);
-    // setPois(data);
-
-    addPOILayerToMap(map, pois);
+    removePOILayerFromMap(map);       // 👈 remove previous POIs before adding new
+    addPOILayerToMap(map, pois);      // 👈 add new POIs
   };
+  
+
 
 
 
@@ -294,8 +303,8 @@ const Map = () => {
 
       <div className={`fixed top-0 ${state === "collapsed" ? "md:left-[60px]" : "md:left-[300px]"} left-0  flex  z-10 items-center `}>
         <SidebarTrigger className="ml-2" />
-        {toggleGeocoding ? (
-          <AddressBox route={route} map={map} setToggleGeocoding={setToggleGeocoding} profile={profile} setProfile={setProfile}/>
+        {toggleGeocoding  ?(
+          <AddressBox route={route} map={map} setToggleGeocoding={setToggleGeocoding} profile={profile} setProfile={setProfile} />
         ) : (
           <GeocodingInput map={map} setToggleGeocoding={setToggleGeocoding} />
         )}
@@ -303,7 +312,7 @@ const Map = () => {
 
 
       <ToastContainer position="top-center" autoClose={10000} />
-      <div ref={mapContainer} className="relative inset-0 w-full h-screen rounded-[18px]" />
+      <div ref={mapContainer} className="absolute top-0 inset-0 w-full h-screen rounded-[18px]" />
       <CategoryScroll categories={categories} activeCategory={activeCategory} handleCategoryClick={handleCategoryClick} />
       <div className="relative z-40">
         {showCategoryDetailPopup && pois.length > 0 ? (

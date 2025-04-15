@@ -37,6 +37,7 @@ export default function AddressInput({
   placeholder,
   index,
   location,
+
 }) {
   const [suggestions, setSuggestions] = useState([]); // State for address suggestions
   const [inputValue, setInputValue] = useState(location || ""); // State for input value
@@ -69,17 +70,6 @@ export default function AddressInput({
     dispatch(setWaypoints(updatedWaypoints));
 
 
-            // const optimizeRoute = await getOptimizedRouteWithStops(waypoints);
-            // addRouteLayer(
-            //   map,
-            //   "#A91CD8",
-            //   optimizeRoute.trips[0].geometry.coordinates,
-            //   "route3",
-            //   8,
-            //   setWaypoints,
-            //   waypoints,
-            //   dispatch
-            // );
           
     
   };
@@ -116,6 +106,22 @@ export default function AddressInput({
     setSuggestions([]);
     setInputValue(display_name);
   };
+
+const handleClearInput = () => {
+  setInputValue("");
+  setSuggestions([]);
+  const updatedWaypoints = [...waypoints];
+  updatedWaypoints[index] = {
+    placeName: "",
+    longitude: null,
+    latitude: null,
+  };
+  dispatch(setWaypoints(updatedWaypoints))
+  addUpdatedValhalla(map, valhallaRoute,waypoints,dispatch,profile);    
+
+
+
+}
   return (
     <div className="relative p-2 w-full flex items-center gap-1 ml-[30px] group">
       {/* Start or End Icon */}
@@ -131,24 +137,21 @@ export default function AddressInput({
       )}
 
       {/* Input Field and Suggestions */}
-      <div className="relative w-full ml-3">
+      <div className="relative w-[300px] ml-3">
         <input
           type="text"
           value={inputValue}
           onChange={handleChange}
           placeholder={placeholder}
-          className="w-[280px] py-2 pl-5 pr-8 border rounded-[9px] dark:text-black"
+          className="w-[280px] py-2 pl-5 pr-8 border rounded-[9px] dark:text-black border-[#A91CD8]"
         />
 
         {/* Clear Input Button */}
         {inputValue && (
           <button
             type="button"
-            onClick={() => {
-              setInputValue("");
-              setSuggestions([]);
-            }}
-            className="absolute right-14 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-red-500"
+            onClick={handleClearInput}
+            className="absolute right-7 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-red-500"
           >
             <X className="w-5 h-5" />
           </button>
@@ -175,7 +178,7 @@ export default function AddressInput({
         <button
           type="button"
           onClick={handleDeleteInput}
-          className="rounded-full p-1 ml-2 flex items-center justify-center border-2 font-bold border-black dark:border-white hover:bg-gray-100 dark:hover:bg-gray-800 opacity-0 group-hover:opacity-100 transition-opacity"
+          className="rounded-full p-1 ml-1 flex items-center justify-center border-2 font-bold border-black dark:border-white hover:bg-gray-100 dark:hover:bg-gray-800 opacity-0 group-hover:opacity-100 transition-opacity"
         >
           <X className="w-4 h-4" />
         </button>
