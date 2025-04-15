@@ -11,7 +11,7 @@ import { useEffect } from "react";
 import { Car, Bus, MapPin, X, Bike, Plus } from "lucide-react";
 import { MdDirections, MdDirectionsCarFilled, MdDirectionsTransitFilled, MdDirectionsWalk, MdOutlineAirplanemodeActive } from "react-icons/md";
 
-const AddressBox = ({ route, setToggleGeocoding }) => {
+const AddressBox = ({ route, setToggleGeocoding, profile, setProfile }) => {
   const dispatch = useDispatch();
   const { waypoints } = useSelector((state) => state.map);
   const controls = useAnimation();
@@ -78,35 +78,58 @@ const AddressBox = ({ route, setToggleGeocoding }) => {
           <CardContent className="p-0">
             <div className="flex items-center justify-between p-2 w-full ">
 
-            <div className="flex items-center p-2 w-full gap-2 ml-[5px] h-full">
-              <Button variant="ghost" className="p-3 hover:bg-gray-200 dark:hover:bg-gray-700">
-                <MdDirections size={1000} />
-              </Button>
-              <Button variant="ghost" className="p-3 hover:bg-gray-200 dark:hover:bg-gray-700">
-                <MdDirectionsCarFilled width={10} height={10} />
-              </Button>
-              <Button variant="ghost" className="p-3 hover:bg-gray-200 dark:hover:bg-gray-700">
-                <MdDirectionsTransitFilled className="text-2xl" />
-              </Button>
-              <Button variant="ghost" className="p-3 hover:bg-gray-200 dark:hover:bg-gray-700">
-                <MdDirectionsWalk className="text-2xl" />
-              </Button>
-              <Button variant="ghost" className="p-3 hover:bg-gray-200 dark:hover:bg-gray-700">
-                <Bike className="text-2xl" />
-              </Button>
-              <Button variant="ghost" className="p-3 hover:bg-gray-200 dark:hover:bg-gray-700">
-                <MdOutlineAirplanemodeActive className="text-3xl" />
-              </Button>
+              <div className="flex items-center p-2 w-full gap-2 ml-[5px] h-full">
+                <Button
+                  variant="ghost"
+                  className={`p-3 hover:bg-gray-200 dark:hover:bg-gray-700 ${profile === "auto" ? "bg-primary text-white" : ""}`}
+                  onClick={() => setProfile("auto")}
+                >
+                  <MdDirections />
+                </Button>
+                <Button
+                  variant="ghost"
+                  className={`p-3 hover:bg-gray-200 dark:hover:bg-gray-700 ${profile === "motor_scooter" ? "bg-primary text-white" : ""}`}
+                  onClick={() => setProfile("motor_scooter")}
+                >
+                  <MdDirectionsCarFilled />
+                </Button>
+                <Button
+                  variant="ghost"
+                  className={`p-3 hover:bg-gray-200 dark:hover:bg-gray-700 ${profile === "transit" ? "bg-primary text-white" : ""}`}
+                  onClick={() => setProfile("transit")}
+                >
+                  <MdDirectionsTransitFilled className="text-2xl" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  className={`p-3 hover:bg-gray-200 dark:hover:bg-gray-700 ${profile === "pedestrian" ? "bg-primary text-white" : ""}`}
+                  onClick={() => setProfile("pedestrian")}
+                >
+                  <MdDirectionsWalk className="text-2xl" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  className={`p-3 hover:bg-gray-200 dark:hover:bg-gray-700 ${profile === "bicycle" ? "bg-primary text-white" : ""}`}
+                  onClick={() => setProfile("bicycle")}
+                >
+                  <Bike className="text-2xl" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  className={`p-3 hover:bg-gray-200 dark:hover:bg-gray-700 ${profile === "multimodal" ? "bg-primary text-white" : ""}`}
+                  onClick={() => setProfile("multimodal")}
+                >
+                  <MdOutlineAirplanemodeActive className="text-3xl" />
+                </Button>
+              </div>
 
-          
-            </div>
-            <Button variant="ghost" onClick={() => setToggleGeocoding(false)} className="hover:bg-gray-200 dark:hover:bg-gray-700">
+              <Button variant="ghost" onClick={() => setToggleGeocoding(false)} className="hover:bg-gray-200 dark:hover:bg-gray-700">
                 <X className="text-2xl" />
               </Button>
             </div>
             {waypoints.map((waypoint, index) => (
-              <motion.div 
-                key={index} 
+              <motion.div
+                key={index}
                 className="flex items-center gap-2 w-full"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -124,7 +147,7 @@ const AddressBox = ({ route, setToggleGeocoding }) => {
             ))}
 
             {waypoints.length >= 2 && waypoints[1].longitude !== null && waypoints[0].latitude !== null && (
-              <motion.div 
+              <motion.div
                 className="flex items-center gap-3 ml-8"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -144,7 +167,7 @@ const AddressBox = ({ route, setToggleGeocoding }) => {
 
           <CardFooter className="p-0 w-full">
             <div className="w-full">
-              <RenderDirectionDetail route={route} />
+              {/* <RenderDirectionDetail route={route} /> */}
             </div>
           </CardFooter>
         </motion.div>

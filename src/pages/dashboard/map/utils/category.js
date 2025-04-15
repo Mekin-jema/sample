@@ -5,206 +5,192 @@ import {
   FaHome, FaBeer, FaClinicMedical, FaTrain, FaSubway, FaPlane, FaBriefcase 
 } from "react-icons/fa";
 
+// Color palette by category type
+const COLORS = {
+  FOOD: '#C0392B',         // Darker red
+  LODGING: '#AD1457',      // Darker pink
+  SHOPPING: '#388E3C',     // Darker green
+  NATURE: '#00897B',       // Darker teal
+  TRANSPORT: '#3F51B5',    // Darker indigo
+  HEALTH: '#7B1FA2',       // Darker purple
+  EDUCATION: '#0288D1',    // Darker blue
+  FITNESS: '#E64A19',      // Darker deep orange
+  CULTURE: '#FFA000',      // Darker amber
+  RELIGION: '#673AB7',     // Darker deep purple
+  ENTERTAINMENT: '#D81B60',// Darker pink
+  BUSINESS: '#607D8B',     // Darker blue grey
+  RESIDENTIAL: '#7CB342',  // Darker light green
+};
+
+
 const categories = [
   {
     name: "Restaurants",
     tag: "amenity=restaurant",
     icon: "restaurant",
     IconComponent: FaUtensils,
-    iconUrl: "/icons/restaurant.png",
-    bgColor: "#F57F17", // Gold
+    iconColor: COLORS.FOOD,
+    textColor: COLORS.FOOD,
   },
   {
     name: "Hotels",
     tag: "tourism=hotel",
     icon: "hotel",
     IconComponent: FaHotel,
-    iconUrl: "/icons/hotel.png",
-    bgColor: "#FF6347", // Tomato
+    iconColor: COLORS.LODGING,
+    textColor: COLORS.LODGING,
   },
   {
     name: "Supermarkets",
     tag: "shop=supermarket",
     icon: "shopping-cart",
     IconComponent: FaShoppingCart,
-    iconUrl: "/icons/supermarket.png",
-    bgColor: "#32CD32", // Lime Green
+    iconColor: COLORS.SHOPPING,
+    textColor: COLORS.SHOPPING,
   },
   {
     name: "Parks",
     tag: "leisure=park",
     icon: "park",
     IconComponent: FaTree,
-    iconUrl: "/icons/park.png",
-    bgColor: "#6D7BE3", // Forest Green
+    iconColor: COLORS.NATURE,
+    textColor: COLORS.NATURE,
   },
   {
     name: "Fuel Stations",
     tag: "amenity=fuel",
-    icon: "gas-station",
+    icon: "local_gas_station",
     IconComponent: FaGasPump,
-    iconUrl: "/icons/gas.png",
-    bgColor: "#FF4500", // Orange Red
+    iconColor: COLORS.TRANSPORT,
+    textColor: COLORS.TRANSPORT,
   },
   {
     name: "Hospitals",
     tag: "amenity=hospital",
-    icon: "hospital",
+    icon: "local_hospital",
     IconComponent: FaHospital,
-    iconUrl: "/icons/hospital.png",
-    bgColor: "#DC143C", // Crimson
+    iconColor: COLORS.HEALTH,
+    textColor: COLORS.HEALTH,
   },
   {
     name: "Clinics",
     tag: "amenity=clinic",
-    icon: "clinic",
+    icon: "local_pharmacy",
     IconComponent: FaClinicMedical,
-    iconUrl: "/icons/clinic.png",
-    bgColor: "#FF69B4", // Hot Pink
+    iconColor: COLORS.HEALTH,
+    textColor: COLORS.HEALTH,
   },
   {
     name: "Universities",
     tag: "amenity=university",
-    icon: "university",
+    icon: "school",
     IconComponent: FaUniversity,
-    iconUrl: "/icons/university.png",
-    bgColor: "#4682B4", // Steel Blue
-  },
-  {
-    name: "Shopping Malls",
-    tag: "shop=mall",
-    icon: "shopping-mall",
-    IconComponent: FaShoppingBag,
-    iconUrl: "/icons/shopping-mall.png",
-    bgColor: "#9370DB", // Medium Purple
+    iconColor: COLORS.EDUCATION,
+    textColor: COLORS.EDUCATION,
   },
   {
     name: "Bus Stations",
     tag: "public_transport=bus_station",
     icon: "bus",
     IconComponent: FaBus,
-    iconUrl: "/icons/bus.png",
-    bgColor: "#FFA500", // Orange
+    iconColor: COLORS.TRANSPORT,
+    textColor: COLORS.TRANSPORT,
   },
   {
     name: "Train Stations",
     tag: "railway=station",
     icon: "train",
     IconComponent: FaTrain,
-    iconUrl: "/icons/train.png",
-    bgColor: "#8B0000", // Dark Red
+    iconColor: COLORS.TRANSPORT,
+    textColor: COLORS.TRANSPORT,
   },
   {
     name: "Subways",
     tag: "railway=subway",
     icon: "subway",
     IconComponent: FaSubway,
-    iconUrl: "/icons/subway.png",
-    bgColor: "#2E8B57", // Sea Green
+    iconColor: COLORS.TRANSPORT,
+    textColor: COLORS.TRANSPORT,
   },
   {
     name: "Airports",
     tag: "aeroway=aerodrome",
-    icon: "airport",
+    icon: "flight",
     IconComponent: FaPlane,
-    iconUrl: "/icons/airport.png",
-    bgColor: "#1E90FF", // Dodger Blue
+    iconColor: COLORS.TRANSPORT,
+    textColor: COLORS.TRANSPORT,
   },
   {
     name: "Gyms & Fitness Centers",
     tag: "leisure=fitness_centre",
-    icon: "gym",
+    icon: "fitness_center",
     IconComponent: FaDumbbell,
-    iconUrl: "/icons/gym.png",
-    bgColor: "#FF1493", // Deep Pink
+    iconColor: COLORS.FITNESS,
+    textColor: COLORS.FITNESS,
   },
   {
     name: "Tourist Attractions",
     tag: "tourism=attraction",
-    icon: "landmark",
+    icon: "travel_explore",
     IconComponent: FaLandmark,
-    iconUrl: "/icons/landmark.png",
-    bgColor: "#FFD700", // Gold
+    iconColor: COLORS.CULTURE,
+    textColor: COLORS.CULTURE,
   },
   {
     name: "Mosques",
     tag: "amenity=place_of_worship&religion=muslim",
     icon: "mosque",
     IconComponent: FaMosque,
-    iconUrl: "/icons/mosque.png",
-    bgColor: "#008080", // Teal
+    iconColor: COLORS.RELIGION,
+    textColor: COLORS.RELIGION,
   },
   {
     name: "Churches",
     tag: "amenity=place_of_worship&religion=christian",
     icon: "church",
     IconComponent: FaChurch,
-    iconUrl: "/icons/church.png",
-    bgColor: "#800080", // Purple
-  },
-  {
-    name: "Office Buildings",
-    tag: "building=office",
-    icon: "office",
-    IconComponent: FaBuilding,
-    iconUrl: "/icons/office.png",
-    bgColor: "#708090", // Slate Gray
+    iconColor: COLORS.RELIGION,
+    textColor: COLORS.RELIGION,
   },
   {
     name: "Libraries",
     tag: "amenity=library",
-    icon: "library",
+    icon: "local_library",
     IconComponent: FaBook,
-    iconUrl: "/icons/library.png",
-    bgColor: "#6A5ACD", // Slate Blue
+    iconColor: COLORS.EDUCATION,
+    textColor: COLORS.EDUCATION,
   },
   {
     name: "Cinemas & Theaters",
     tag: "amenity=cinema",
-    icon: "cinema",
+    icon: "movie",
     IconComponent: FaTheaterMasks,
-    iconUrl: "/icons/movie-projector.png",
-    bgColor: "#FF4500", // Orange Red
-  },
-  {
-    name: "Bars & Pubs",
-    tag: "amenity=bar",
-    icon: "bar",
-    IconComponent: FaBeer,
-    iconUrl: "/icons/beer.png",
-    bgColor: "#DAA520", // Goldenrod
-  },
-  {
-    name: "Nightclubs",
-    tag: "amenity=nightclub",
-    icon: "nightclub",
-    IconComponent: FaCocktail,
-    iconUrl: "/icons/cocktail.png",
-    bgColor: "#FF69B4", // Hot Pink
+    iconColor: COLORS.ENTERTAINMENT,
+    textColor: COLORS.ENTERTAINMENT,
   },
   {
     name: "Car Rentals",
     tag: "amenity=car_rental",
-    icon: "car-rental",
+    icon: "car_rental",
     IconComponent: FaCar,
-    iconUrl: "/icons/car-rental.png",
-    bgColor: "#4682B4", // Steel Blue
+    iconColor: COLORS.TRANSPORT,
+    textColor: COLORS.TRANSPORT,
   },
   {
     name: "Residential Areas",
     tag: "landuse=residential",
     icon: "home",
     IconComponent: FaHome,
-    iconUrl: "/icons/home.png",
-    bgColor: "#2E8B57", // Sea Green
+    iconColor: COLORS.RESIDENTIAL,
+    textColor: COLORS.RESIDENTIAL,
   },
   {
     name: "Business Centers",
     tag: "office=company",
-    icon: "briefcase",
+    icon: "business_center",
     IconComponent: FaBriefcase,
-    iconUrl: "/icons/briefcase.png",
-    bgColor: "#708090", // Slate Gray
+    iconColor: COLORS.BUSINESS,
+    textColor: COLORS.BUSINESS,
   },
 ];
 

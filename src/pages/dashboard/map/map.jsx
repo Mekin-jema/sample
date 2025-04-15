@@ -1,68 +1,19 @@
-/**
-* Map Component
-*
-* This component renders an interactive map using MapLibre GL and integrates various features such as:
-* - Route calculation and rendering
-* - Point of Interest (POI) display
-* - Real-time traffic data visualization
-* - Satellite view toggling
-* - Marker placement and drag functionality
-* - Toast notifications for user feedback
-*
-* Dependencies:
-* - MapLibre GL for map rendering
-* - PMTiles for map tile protocol
-* - React hooks for state and lifecycle management
-* - Redux for state management
-* - External APIs for route, POI, and traffic data
-*/
-
-
 import React, { useEffect, useRef, useState } from "react"; // React hooks
 import { useSelector, useDispatch } from "react-redux"; // Redux hooks
 import { ToastContainer } from "react-toastify"; // Toast notifications
 import "react-toastify/dist/ReactToastify.css"; // Toast styles
-
-
 // MapLibre GL library and styles
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
-
-
 // PMTiles for map tile protocol
-import { PMTiles, Protocol } from "pmtiles";
-
-
-// API functions
-import { getRouteInfo } from "@/pages/dashboard/map/api/getRouteInfo"; // Fetch route information
-import { getShortestRoute } from "@/pages/dashboard/map/api/getShortestRoute"; // Fetch shortest route
 import { getDefaultRoute } from "@/pages/dashboard/map/api/getValhallaRoute"; // Fetch default route (Valhalla)
-import { getOptimizedRouteWithStops } from "@/pages/dashboard/map/api/getOptimizedRouteWithStops"; // Fetch optimized route with stops
 import fetchPOIs from "@/pages/dashboard/map/api/getPointOfInterest"; // Fetch POIs
 import fetchTrafficData from "@/pages/dashboard/map/api/getTrafficData"; // Fetch traffic data
-
-
 // Utility functions
-import decodePolyline from "@/pages/dashboard/map/utils/decoder"; // Decode polylines
-import { addRouteLayer } from "@/pages/dashboard/map/utils/addRoutelayer"; // Add route layers to the map
 import { addPOILayerToMap } from "@/pages/dashboard/map/utils/addPOILayer"; // Add POI layers to the map
 import { addTrafficLayer } from "@/pages/dashboard/map/utils/addTrafficLayer"; // Add traffic layers to the map
-
-
-// Components// Render address input fields
-// import TrafficLegend from "@/utils/TrafficLegened"; // Traffic legend (commented out)
-
-
-// import RenderDirectionDetail from "./InputHandler"; // Render address input fields
-// import TrafficLegend from "../utils/TrafficLegened"; // Traffic legend (commented out)
-
-
-// Styles
 import categories from "@/pages/dashboard/map/utils/category"; // POI categories
-
-
 // Redux actions
-import { setWaypoints } from "@/Redux/MapSlice"; // Redux action for setting waypoints
 import Categories from "@/pages/dashboard/map/Popup/Categories";
 import Filter from "@/pages/dashboard/map/Popup/Filter";
 
@@ -74,14 +25,15 @@ import { styles } from "@/pages/dashboard/map/map-styles/MapStyles";
 import CategoryScroll from "@/pages/dashboard/map/poi-buttons";
 import { variablelStyles } from "@/pages/dashboard/map/map-styles/variable-style";
 import MapStyles from "@/pages/dashboard/map/map-style-popup";
+import { addUpdatedValhalla } from "./utils/add-updated-valhalla";
+import "../../dashboard/map/Popup/style.css"
+import { getRouteInfo } from "./api";
 
 
 const Map = () => {
   // Refs for map container and instance
   const mapContainer = useRef(null);
   const mapInstance = useRef(null);
-
-
   // State variables
   const [route, setRoute] = useState(null); // Current route
   const [map, setMap] = useState(null); // Map instance
@@ -92,16 +44,16 @@ const Map = () => {
   const [showCategoryDetailPopup, setShowCategoryDetailPopup] = useState(false); // Category detail state
   const [showFilterPopup, setShowFilterPopup] = useState(false); // Filter popup state
   const [toggleGeocoding, setToggleGeocoding] = useState(false); // Geocoding toggle state
-    const [mapStyle, setMapStyle] = useState(variablelStyles[1].url);
+  const [mapStyle, setMapStyle] = useState(variablelStyles[0].url);
+  const [profile, setProfile] = useState("auto"); // Routing type (button selected)
+
   const { state } = useSidebar(); // Get sidebar state (expanded or collapsed)
 
   const dispatch = useDispatch();
   const { waypoints } = useSelector((state) => state.map); // Waypoints from Redux
   const myAPIKey=import.meta.env.VITE_API_KEY; // API key from environment variables
-    const [selectedStyle, setSelectedStyle] = useState(variablelStyles[1].name);
+  const [selectedStyle, setSelectedStyle] = useState(variablelStyles[0].name);
   
-
-
   // Initialize MapLibre 
   useEffect(() => {
     // Create and configure the map instance
@@ -175,6 +127,7 @@ const Map = () => {
     })
       .setLngLat([38.7626, 9.0404])
       .addTo(mapInstance.current);
+
       mapInstance.current.on("styleimagemissing", (e) => {
         const missingImageId = e.id;
       
@@ -183,97 +136,20 @@ const Map = () => {
         if (category && !mapInstance.current.hasImage(missingImageId)) {
           const img = new Image();
           img.crossOrigin = "anonymous";
-          img.src = category.iconUrl;
       
-          img.onload = () => {
-        const zoom = mapInstance.current.getZoom();
-      
-        // Size calculations with better scaling
-        const maxSize =400;
-        const minSize = 70;
-        const zoomThreshold = 16;
-      
-        let canvasSize = maxSize;
-        if (zoom < zoomThreshold) {
-          const scaleFactor = Math.min(1, Math.max(0, (zoom - 10) / (zoomThreshold - 10)));
-          canvasSize = minSize + (maxSize - minSize) * scaleFactor;
-        }
-      
-        // Pointer dimensions (adjusted to remove gap)
-        const pointerHeight = canvasSize * 0.2; // Reduced pointer height
-        const pointerWidth = canvasSize * 0.15; // Narrower pointer
-        const totalHeight = canvasSize; // Removed extra height
-      
-        const canvas = document.createElement("canvas");
-        canvas.width = canvasSize;
-        canvas.height = totalHeight;
-        const ctx = canvas.getContext("2d");
-      
-        // Improved shape with smoother curves
-        ctx.beginPath();
-        
-        // Draw the main circle
-        const circleRadius = canvasSize / 2 - 4;
-        const circleCenterX = canvasSize / 2;
-        const circleCenterY = circleRadius;
-        ctx.arc(circleCenterX, circleCenterY, circleRadius, 0, Math.PI * 2);
-        
-        // Draw the pointer with bezier curves for smoother shape
-        const pointerTop = canvasSize - pointerHeight;
-        const pointerBottom = canvasSize;
-        ctx.moveTo(circleCenterX - pointerWidth, pointerTop);
-        
-        // Left curve of pointer
-        ctx.bezierCurveTo(
-          circleCenterX - pointerWidth * 0.7, pointerTop + pointerHeight * 0.5,
-          circleCenterX - pointerWidth * 0.3, pointerBottom - pointerHeight * 0.2,
-          circleCenterX, pointerBottom
-        );
-        
-        // Right curve of pointer
-        ctx.bezierCurveTo(
-          circleCenterX + pointerWidth * 0.3, pointerBottom - pointerHeight * 0.2,
-          circleCenterX + pointerWidth * 0.7, pointerTop + pointerHeight * 0.5,
-          circleCenterX + pointerWidth, pointerTop
-        );
-        
-        ctx.closePath();
-      
-        // Fill with Google Maps red
-        ctx.fillStyle = category.bgColor || "#FF0000"; // Default to red if bgColor is undefined
-        
-        // // Enhanced shadow
-        ctx.shadowColor = "rgba(0, 0, 0, 0.3)";
-        ctx.shadowBlur =4;
-        ctx.shadowOffsetX = 0;
-        ctx.shadowOffsetY = 1;
-        ctx.fill();
-      
- 
-        // Draw the icon with better positioning and sizing
-        const iconSize = canvasSize * 0.6; // Larger icon area
-        const iconX = (canvasSize - iconSize) / 2;
-        const iconY = (circleCenterY - iconSize / 2); // Adjusted to remove gap
-        
-        // Optional: Add white background for the icon
-        ctx.save();
-        ctx.beginPath();
-        ctx.arc(circleCenterX, circleCenterY, iconSize * 0.4, 0, Math.PI * 2);
-    
-        ctx.fill();
-        ctx.restore();
-        
-        ctx.drawImage(img, iconX, iconY, iconSize, iconSize);
-      
-        // Convert canvas to ImageData
-        const imageData = ctx.getImageData(0, 0, canvasSize, totalHeight);
-      
-        // Add the icon to the map
-        mapInstance.current.addImage(missingImageId, imageData);
-          };
+            // ✅ Dynamically build the Geoapify icon URL
+            const iconName = category.icon; // e.g., 'restaurant', 'hotel'
+            const color = category.textColor; // You can customize this
+            const strokeColor = "ffffff00"; // Decreased stroke (fully transparent)
+            const iconType = 'material'; // 'awesome' maps to FontAwesome, or use 'material' etc.
+            img.src = `https://api.geoapify.com/v1/icon/?type=material&color=${encodeURIComponent(color)}&icon=${iconName}&iconType=${iconType}&strokeColor=${encodeURIComponent(strokeColor)}&apiKey=${myAPIKey}`;
+          
+            img.onload = () => {
+            mapInstance.current.addImage(missingImageId, img);
+            };
       
           img.onerror = () => {
-        console.error(`Failed to load image: ${category.iconUrl}`);
+            console.error(`Failed to load icon for ${iconName}`);
           };
         }
       });
@@ -302,101 +178,30 @@ const Map = () => {
   useEffect(() => {
     if (mapInstance.current) {
       mapInstance.current.setStyle(`${mapStyle}?apiKey=${myAPIKey}`);
-      const updateMapLayer=async()=>{
 
-        const optimizeRoute = await getOptimizedRouteWithStops(waypoints);
-        addRouteLayer(
-          map,
-          "#A91CD8",
-          optimizeRoute.trips[0].geometry.coordinates,
-          "route3",
-          8,
-          setWaypoints,
-          waypoints,
-          dispatch
-        );
-      }
-
-      updateMapLayer()
 
     }
   }, [mapStyle]);
 
   // * Fetch and render routes based on waypoints
+  
   useEffect(() => {
-    // console.log("mekin")
 
-    console.log(waypoints)
-    if (!map || !waypoints[0].latitude || !waypoints[1].longitude) return;
+   // Check if the map exists and all waypoints have valid lat/lng
+   const isValidWaypoints = waypoints.every(
+    (wp) => wp.latitude !== null && wp.longitude !== null
+  );
+  if (!map || waypoints.length < 2 || !isValidWaypoints) return;
 
 
     const fetchRoutes = async () => {
-      const coordinates = waypoints.slice(0, 2);
-      console.log( "mycoordinates",coordinates)
 
 
       try {
-        if (waypoints.length <= 2) {
-          const [routeInfo, shortestRoute, valhallaRoute] = await Promise.all([
-            getRouteInfo(coordinates),
-            getShortestRoute(coordinates),
-            getDefaultRoute(coordinates),
-          ]);
-  //  console.log("first")
-          console.log(routeInfo, shortestRoute, valhallaRoute);
-
-
-          if (routeInfo?.routes?.length > 0) {
-            setRoute(routeInfo.routes[0]);
-          }
-
-
-          if (shortestRoute?.routes?.length > 0) {
-            addRouteLayer(
-              map,
-              "#92E3A9",
-              shortestRoute.routes[0].geometry.coordinates,
-              "route1",
-              5,
-              setWaypoints,
-              waypoints,
-              dispatch
-            );
-          }
-
-
-          if (valhallaRoute?.trip?.legs?.length > 0) {
-            const routeGeometry = valhallaRoute.trip.legs.flatMap((leg) =>
-              decodePolyline(leg.shape)
-            );
-            addRouteLayer(
-              map,
-              "#A91CD8",
-              routeGeometry,
-              "route2",
-              8,
-              setWaypoints,
-              waypoints,
-              dispatch
-            );
-          }
-        } else {
-          const optimizeRoute = await getOptimizedRouteWithStops(waypoints);
-          console.log("optimizeRoute", optimizeRoute);
-          if (optimizeRoute?.trips?.length > 0) {
-            addRouteLayer(
-              map,
-              "#A91CD8",
-              optimizeRoute.trips[0].geometry.coordinates,
-              "route3",
-              8,
-              setWaypoints,
-              waypoints,
-              dispatch
-            );
-            setRoute(optimizeRoute.trips[0]);
-          }
-        }
+          const valhallaRoute = await getDefaultRoute(waypoints,profile)
+          const routesInfo= await getRouteInfo(waypoints)
+          setRoute(routesInfo); 
+          addUpdatedValhalla(map, valhallaRoute,waypoints,dispatch,profile);        
       } catch (error) {
         console.error("Error fetching routes:", error.message);
       }
@@ -404,7 +209,7 @@ const Map = () => {
 
 
     fetchRoutes();
-  }, [map, waypoints, dispatch]);
+  }, [map,waypoints, dispatch,profile,setProfile,mapStyle]);
 
 
   /**
@@ -455,6 +260,7 @@ const Map = () => {
       lat: element.lat || element.center?.lat,
       lng: element.lon || element.center?.lon,
       icon,
+      color: category.textColor,
       cuisine: element.tags.cousine || "",
       internet_access: element.tags.internet_access || "",
       opening_hours: element.tags.opening_hours || "",
@@ -467,7 +273,6 @@ const Map = () => {
 
     addPOILayerToMap(map, pois);
   };
-  console.log(pois)
 
 
 
@@ -490,11 +295,12 @@ const Map = () => {
       <div className={`fixed top-0 ${state === "collapsed" ? "md:left-[60px]" : "md:left-[300px]"} left-0  flex  z-10 items-center `}>
         <SidebarTrigger className="ml-2" />
         {toggleGeocoding ? (
-          <AddressBox route={route} map={map} setToggleGeocoding={setToggleGeocoding} />
+          <AddressBox route={route} map={map} setToggleGeocoding={setToggleGeocoding} profile={profile} setProfile={setProfile}/>
         ) : (
           <GeocodingInput map={map} setToggleGeocoding={setToggleGeocoding} />
         )}
       </div>
+
 
       <ToastContainer position="top-center" autoClose={10000} />
       <div ref={mapContainer} className="relative inset-0 w-full h-screen rounded-[18px]" />

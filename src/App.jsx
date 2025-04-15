@@ -1,4 +1,3 @@
-
 // import { AmbaBoard } from "./components";
 import { Navigate, Route, Routes, BrowserRouter } from "react-router-dom";
 import { AccountSettings, ApiClients, Board, Map } from "./pages/dashboard";
@@ -9,6 +8,7 @@ import DashboardMainPage from "./pages/dashboard/amba-dashboard";
 import NavigationInput from "./pages/dashboard/geo-coding/geocoding";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Users, { loader as usersLoader } from "./pages/dashboard/team-managment/layout/users";
+
 import NotFoundError from "./pages/error/404";
 import UserAdd from "./pages/dashboard/team-managment/add/route";
 import UserInvite from "./pages/dashboard/team-managment/invite/route";
@@ -16,6 +16,8 @@ import ForgotPassword from "./pages/auth/forgot-password/route";
 import SignIn from "./pages/auth/sign-in/route";
 import SignUp from "./pages/auth/sign-up/route";
 import Otp from "./pages/auth/otp/route";
+import UserDelete from "./pages/dashboard/team-managment/delete/route";
+import ClientsPage,{Loader as ClinetLoader} from "./pages/dashboard/api-key/layout/api-client";
 
 const router = createBrowserRouter([
 
@@ -26,8 +28,21 @@ const router = createBrowserRouter([
     path: "/dashboard",
     element: <DashboardMainPage />,
     children: [
-      { index: true, element: <Board /> },
-      { path: "api-keys", element: <ApiClients /> },
+      { index: true, element: <Board  /> },
+
+      ,
+
+      {
+        path: "api-keys",
+        element: <ClientsPage />,
+        loader: ClinetLoader,
+        children:[
+          { path: "invite", element: <UserInvite /> },
+          { path: "add", element: <UserAdd /> },
+          {path:"delete",element:<UserDelete/>}
+        ]
+
+      },
       { path: "account-settings", element: <AccountSettings /> },
       { path: "support-docs", element: <Documentation /> },
       { path: "analytics-logs", element: <AnalyticsLogs /> },
@@ -37,12 +52,17 @@ const router = createBrowserRouter([
         , element: <BillingSubscription />
       },
       { path: "geocoding", element: <NavigationInput /> },
-      { path: "invite", element: <UserInvite /> },
-      { path: "add", element: <UserAdd /> },
+     
+      
       {
         path: "users",
         element: <Users />,
         loader: usersLoader,
+        children:[
+          { path: "invite", element: <UserInvite /> },
+          { path: "add", element: <UserAdd /> },
+          {path:"delete",element:<UserDelete/>}
+        ]
 
       }
       // ... other nested routes

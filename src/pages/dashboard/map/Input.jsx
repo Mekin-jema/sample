@@ -20,7 +20,7 @@ import { useSelector, useDispatch } from "react-redux"; // Redux hooks
 import { setOpen, setWaypoints } from "../../../Redux/MapSlice"; // Redux actions
 import start from "../../../assets/POI/start.svg"; // Icon for start point
 import end from "../../../assets/POI/end.svg"; // Icon for end point
-import { getPlaces } from "./api";
+import { getOptimizedRouteWithStops, getPlaces } from "./api";
 
 /**
  * AddressInput Component
@@ -55,7 +55,6 @@ export default function AddressInput({
   const queryPlaces = async (query) => {
     if (query) {
       const res = await getPlaces(query);
-      console.log(res)
       if (res) {
         setSuggestions(res);
       }
@@ -70,17 +69,17 @@ export default function AddressInput({
     dispatch(setWaypoints(updatedWaypoints));
 
 
-            const optimizeRoute = await getOptimizedRouteWithStops(waypoints);
-            addRouteLayer(
-              map,
-              "#A91CD8",
-              optimizeRoute.trips[0].geometry.coordinates,
-              "route3",
-              8,
-              setWaypoints,
-              waypoints,
-              dispatch
-            );
+            // const optimizeRoute = await getOptimizedRouteWithStops(waypoints);
+            // addRouteLayer(
+            //   map,
+            //   "#A91CD8",
+            //   optimizeRoute.trips[0].geometry.coordinates,
+            //   "route3",
+            //   8,
+            //   setWaypoints,
+            //   waypoints,
+            //   dispatch
+            // );
           
     
   };

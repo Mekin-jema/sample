@@ -1,15 +1,15 @@
 import { IconAlertTriangle } from '@tabler/icons-react'
 import { useState } from 'react'
-import { ConfirmDialog } from '@/components/confirm-dialog'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { Dialog } from '@/components/ui/dialog'
 
 export function UsersDeleteDialog({ open, onOpenChange, user }) {
   const [value, setValue] = useState('')
 
   return (
-    <ConfirmDialog
+    <Dialog
       open={open}
       onOpenChange={onOpenChange}
       disabled={value.trim() !== user.username}

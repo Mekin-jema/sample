@@ -1,35 +1,35 @@
 import { IconMailPlus, IconUserPlus } from '@tabler/icons-react'
 import { Link, Outlet, useLoaderData, useSearchParams } from 'react-router'
 
+import { columns } from './components/clients-columns' // updated
+// import { ClientsTable } from './components/clients-table' // updated
 
-
-
-import { columns } from './components/users-columns'
-import { UsersTable } from './components/users-table'
 import {
   FilterSchema,
   PaginationSchema,
   QuerySchema,
   SortSchema,
 } from './hooks/use-data-table-state'
-import { getFacetedCounts, listFilteredUsers } from './queries.server'
+
+import { getFacetedClientCounts, listFilteredClients } from './queries.server' // updated imports
 import { Main } from '@/pages/dashboard/main'
 import { Header } from '@/pages/dashboard/navbar/main-header'
 import { Search } from '@/pages/dashboard/navbar/search'
 import { DarkModeToggle } from '@/pages/dashboard/navbar/toggle-theme'
 import { NavUser } from '@/pages/dashboard/navbar/header-user'
 import { Button } from '@/components/ui/button'
+import { UsersTable } from './components/clients-table'
 
-export const loader = ({ request }) => {
+export const Loader = ({ request }) => {
   const searchParams = new URLSearchParams(new URL(request.url).searchParams)
 
-  const { username } = QuerySchema.parse({
-    username: searchParams.get('username'),
+  const { user } = QuerySchema.parse({
+    username: searchParams.get('username') || '',
   })
 
   const { ...filters } = FilterSchema.parse({
     status: searchParams.getAll('status'),
-    priority: searchParams.getAll('priority'),
+    realm: searchParams.getAll('realm'),
   })
 
   const { sort_by: sortBy, sort_order: sortOrder } = SortSchema.parse({
@@ -42,8 +42,8 @@ export const loader = ({ request }) => {
     per_page: searchParams.get('per_page'),
   })
 
-  const { pagination, data: users } = listFilteredUsers({
-    username,
+  const { pagination, data: clients } = listFilteredClients({
+    user,
     filters,
     currentPage,
     pageSize,
@@ -51,53 +51,50 @@ export const loader = ({ request }) => {
     sortOrder,
   })
 
-  const facetedCounts = getFacetedCounts({
-    facets: ['status', 'role'],
-    username,
+  const facetedCounts = getFacetedClientCounts({
+    facets: ['status', 'realm'],
+    user,
     filters,
   })
 
-  return { users, pagination, facetedCounts }
+  return { clients, pagination, facetedCounts }
 }
-export default function Users() {
-  const { users, pagination, facetedCounts } = useLoaderData();
+
+export default function ClientsPage() {
+  const { clients, pagination, facetedCounts } = useLoaderData()
   const [searchParams] = useSearchParams()
+
   return (
     <>
-         <Header>
-           {/* <TopNav links={topNav} /> */}
-           <div className="ml-auto flex items-center space-x-4">
-             <Search />
-             <DarkModeToggle />
-             <NavUser />
-           </div>
-         </Header>
-         
+      <Header>
+        <div className="ml-auto flex items-center space-x-4">
+          <Search />
+          <DarkModeToggle />
+          <NavUser />
+        </div>
+      </Header>
 
       <Main>
         <div className="mb-2 flex flex-wrap items-center justify-between space-y-2">
           <div>
-            <h2 className="text-2xl font-bold tracking-tight">User List</h2>
+            <h2 className="text-2xl font-bold tracking-tight">API Clients</h2>
             <p className="text-muted-foreground">
-              Manage your users and their roles here.
+              Manage your API clients and their configurations.
             </p>
           </div>
           <div className="flex gap-2">
-            <Button variant="outline" className="space-x-1" asChild>
-              <Link to={`/dashboard/users/invite?${searchParams.toString()}`}>
-                <span>Invite User</span> <IconMailPlus size={18} />
-              </Link>
-            </Button>
+         
             <Button className="space-x-1" variant="outline" asChild>
-              <Link to={`/dashboard/users/add?${searchParams.toString()}`}>
-                <span>Add User</span> <IconUserPlus size={18} />
+              <Link to={`/dashboard/api-keys/add?${searchParams.toString()}`}>
+                <span>Add Client</span> <IconUserPlus size={18} />
               </Link>
             </Button>
           </div>
         </div>
+
         <div className="-mx-4 flex-1 overflow-auto px-4 py-1 lg:flex-row lg:space-y-0 lg:space-x-12">
           <UsersTable
-            data={users}
+            data={clients}
             columns={columns}
             pagination={pagination}
             facetedCounts={facetedCounts}

@@ -19,7 +19,7 @@ const recentRequests = [
   {
     timestamp: "2024-10-20 10:20 AM",
     type: "Routing",
-    status: "Failed",
+    status: "Failed  ",
     responseTime: "300ms",
   },
   {
@@ -38,65 +38,55 @@ const recentRequests = [
 
 export function RecentAPIRequestsTable() {
   return (
-    <div className="p-6  rounded-2xl shadow-lg   ">
+    <div className="p-2 rounded-2xl shadow-lg font-sora">
       <h2 className="text-2xl font-bold mb-4">Recent API Requests</h2>
-      <Table className="min-w-full border border-gray-200 rounded-lg overflow-hidden">
-        <TableCaption className="text-gray-500 italic p-4">
-          A summary of the most recent API interactions.
-        </TableCaption>
+      <Table className="min-w-full rounded-b-[15px] overflow-hidden dark:bg-[#16423C] p-4 border border-gray-200 dark:border-white/20 font-sora">
         <TableHeader>
-          <TableRow>
-            <TableHead className="w-[180px] p-3 border-b text-left">
+          <TableRow className="border-b border-gray-300 dark:border-white">
+            <TableHead className="bg-[#D19EDB] text-black dark:text-white px-4 py-2 text-left">
               Timestamp
             </TableHead>
-            <TableHead className="p-3 border-b text-left">
+            <TableHead className="bg-[#D19EDB] text-black dark:text-white px-4 py-2 text-left">
               Request Type
             </TableHead>
-            <TableHead className="p-3 border-b text-left">Status</TableHead>
-            <TableHead className="p-3 border-b text-right">
+            <TableHead className="bg-[#D19EDB] text-black dark:text-white px-4 py-2 text-left">
+              Status
+            </TableHead>
+            <TableHead className="bg-[#D19EDB] text-black dark:text-white px-4 py-2 text-left">
               Response Time
             </TableHead>
           </TableRow>
         </TableHeader>
+
         <TableBody>
           {recentRequests.map((request, index) => (
             <TableRow
               key={index}
-              className="hover:bg-gray-50 transition-colors hover:text-black"
+              className="border-b-[0.5px] border-gray-200 dark:border-gray-300 transition-colors"
             >
-              <TableCell className="p-3 border-b text-left">
+              <TableCell className="px-4 py-3 text-left">
                 {request.timestamp}
               </TableCell>
-              <TableCell className="p-3 border-b text-left">
+              <TableCell className="px-4 py-3 text-left">
                 {request.type}
               </TableCell>
-              <TableCell className="p-3 border-b text-left">
+              <TableCell className="px-4 py-3 text-left">
                 <span
-                  className={`px-2 py-1 rounded-full text-sm font-medium ${
+                  className={`px-8 py-2 rounded-full text-sm font-sora font-medium ${
                     request.status === "Success"
-                      ? "bg-green-100 text-green-800"
-                      : "bg-red-100 text-red-800"
+                      ? "bg-[#3A7B52] text-white"
+                      : "bg-[#9A3939] text-white"
                   }`}
                 >
                   {request.status}
                 </span>
               </TableCell>
-              <TableCell className="p-3 border-b text-right">
+              <TableCell className="px-4 py-3 text-left font-sora">
                 {request.responseTime}
               </TableCell>
             </TableRow>
           ))}
         </TableBody>
-        <TableFooter>
-          <TableRow>
-            <TableCell colSpan={3} className="p-3 font-semibold text-left">
-              Total Requests
-            </TableCell>
-            <TableCell className="p-3 text-right font-semibold">
-              {recentRequests.length}
-            </TableCell>
-          </TableRow>
-        </TableFooter>
       </Table>
     </div>
   );

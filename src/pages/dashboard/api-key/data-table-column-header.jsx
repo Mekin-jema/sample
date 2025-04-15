@@ -13,8 +13,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { cn } from '@/lib/utils'
-import { useDataTableState } from '../hooks/use-data-table-state'
-
+import { useDataTableState } from './layout/hooks/use-data-table-state'
 
 export function DataTableColumnHeader({ column, title, className }) {
   const { sort, updateSort } = useDataTableState()
@@ -25,10 +24,10 @@ export function DataTableColumnHeader({ column, title, className }) {
 
   return (
     <div className={cn('flex items-center space-x-2', className)}>
-      <DropdownMenu>
+      <DropdownMenu className="bg-white dark:bg-slate-300">
         <DropdownMenuTrigger asChild>
-          <Button
-            variant="ghost"
+          <Button variant="outline"
+      
             size="sm"
             className="data-[state=open]:bg-accent -ml-3 h-8"
           >
@@ -42,7 +41,7 @@ export function DataTableColumnHeader({ column, title, className }) {
             )}
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="start " className="bg-[#D19EDB] text-black">
+        <DropdownMenuContent align="top" className="dark:bg-slate-700 dark:text-white">
           <DropdownMenuItem
             onClick={() =>
               updateSort({

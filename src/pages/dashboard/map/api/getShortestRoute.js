@@ -1,5 +1,4 @@
 export const getShortestRoute = async (waypoints) => {
-  console.log("shortest route", waypoints);
   try {
     
     // Construct OSRM URL with multiple waypoints
@@ -17,7 +16,6 @@ export const getShortestRoute = async (waypoints) => {
 
     // Parse and return the JSON response
     const data = await response.json();
-    console.log("first route", data);
     return data;
   } catch (error) {
     console.error("Error while fetching the route:", error);

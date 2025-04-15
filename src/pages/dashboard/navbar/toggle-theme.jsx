@@ -15,11 +15,12 @@ export function DarkModeToggle() {
 
   return (
     <Button
-      variant="outline"
+      variant="none"
       size="icon"
       onClick={toggleTheme}
       className="border-none"
     >
+      
       {isDarkMode ? (
         <Sun className="h-[1.2rem] w-[1.2rem] transition-all" />
       ) : (

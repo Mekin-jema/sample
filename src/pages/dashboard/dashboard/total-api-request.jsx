@@ -6,7 +6,7 @@ import {
 } from "recharts";
 import { MapPin, Compass, Layers, BarChart as BarChartIcon } from "lucide-react";
 import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../../components/ui/tabs";
+import { Main } from "../main";
 
 const apiData = [
   { name: "Matrix ", value: 25, color: "#4ade80", icon: <Layers /> },
@@ -42,38 +42,31 @@ const weeklyOverviewData = [
 
 const Billing = () => {
   return (
-    <div className=" p-2 min-h-screen  rounded-xl shadow-lg">
+    <Main className=" p-2 h-full  rounded-xl ">
 
-      {/* Top Stat Cards */}
-      <Card className="  rounded-2xl shadow-xl w-full">
-        <CardContent className="w-full h-full">
-          <Tabs orientation="vertical" defaultValue="overview" className="space-y-4">
-            <TabsContent value="overview">
-              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-                {mockData.map((item) => (
-                  <Card key={item.id} className=" bg-[#E9EFEC] dark:bg-background  rounded-xl hover:scale-105 transition-all duration-300 shadow-lg w-full">
-                  <div className="flex gap-3 items-center justify-between p-3">
-
-                      <p className="text-sm font-semibold inline">{item.title}</p>
-                      {item.icon}
-                  </div>
-
-                    <CardContent>
-                      <div className="text-3xl font-extrabold ">{item.value}</div>
-                    </CardContent>
-                  </Card>
-                ))}
+      {/* /* Top Stat Cards */ }
+      <Card className="rounded-2xl  border-none h-[155px]">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 h-full pt-6">
+          {mockData.map((item) => (
+            <Card
+              key={item.id}
+              className="bg-[#E9EFEC] dark:bg-background w-full rounded-xl hover:scale-105 transition-all duration-300 h-full"
+            >
+              <div className="flex gap-3 items-center justify-between p-3">
+                <p className="text-sm font-semibold">{item.title}</p>
+                {item.icon}
               </div>
-            </TabsContent>
-          </Tabs>
-        </CardContent>
+              <CardContent className="flex items-center h-full">
+                <div className="text-3xl font-extrabold">{item.value}</div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
       </Card>
-
-      {/* Charts Section */}
-         <h2 className="font-bold">Summary</h2>
+         <h2 className="font-bold text-[24px] my-3 font-nunito">Summary</h2>
       <div className="grid gap-3 md:grid-cols-3">
         {/* API Distribution with Icons */}
-        <Card className="rounded-2xl shadow-xl p-2 relative bg-[#E9EFEC] dark:bg-background">
+        <Card className="rounded-2xl p-2 relative bg-[#E9EFEC] dark:bg-background">
           <CardHeader>
             <CardTitle className="text-lg font-semibold">API Request Distribution</CardTitle>
           </CardHeader>
@@ -137,7 +130,7 @@ const Billing = () => {
           </Card>
 
           {/* Weekly Performance Chart */}
-        <Card className=" rounded-2xl shadow-xl  bg-[#E9EFEC] dark:bg-background">
+        <Card className=" rounded-2xl   bg-[#E9EFEC] dark:bg-background">
           <CardHeader>
             <CardTitle className="text-lg font-semibold">Weekly Performance</CardTitle>
           </CardHeader>
@@ -160,7 +153,7 @@ const Billing = () => {
         </Card>
 
         {/* Weekly Overview Bar Chart */}
-        <Card className=" rounded-2xl shadow-xl  bg-[#E9EFEC] dark:bg-background">
+        <Card className=" rounded-2xl   bg-[#E9EFEC] dark:bg-background">
           <CardHeader>
             <CardTitle className="text-lg font-semibold">Weekly Overview</CardTitle>
           </CardHeader>
@@ -181,7 +174,7 @@ const Billing = () => {
         </Card>
 
       </div>
-    </div>
+    </Main>
   );
 };
 

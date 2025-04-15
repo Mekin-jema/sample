@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker'
-
+import { format } from 'timeago.js'
 export const users = Array.from({ length: 20 }, () => {
   const firstName = faker.person.firstName()
   const lastName = faker.person.lastName()
@@ -22,7 +22,7 @@ export const users = Array.from({ length: 20 }, () => {
       'developer',
       'uiux',
     ]),
-    createdAt: faker.date.past(),
-    updatedAt: faker.date.recent(),
+    createdAt: format(faker.date.past()),
+    updatedAt: format(faker.date.recent()),
   }
 })

@@ -5,8 +5,7 @@ export const addPOILayerToMap = (map, pois) => {
   if (map.getSource('pois')) {
     map.removeLayer('poi-layer');
     map.removeSource('pois');
-  }
-  console.log(pois)
+  } 
 
   // Define the GeoJSON source for POIs
   map.addSource('pois', {
@@ -18,6 +17,8 @@ export const addPOILayerToMap = (map, pois) => {
         properties: {
           icon: poi.icon,   // icon name matching the sprite or image
           name: poi.name,   // optional name of the POI
+          color: poi.color, // dynamic text color
+          url: encodeURI(poi.url || "https://www.google.com/maps/?entry=wc"), // Dynamically set and encode URL
         },
         geometry: {
           type: 'Point',
@@ -33,21 +34,41 @@ export const addPOILayerToMap = (map, pois) => {
     type: 'symbol',
     source: 'pois',
     layout: {
-      'icon-image': ['get', 'icon'],             // Uses icon property
-      'icon-size': 0.075, 
-                          // Adjust for better visibility (like Google Maps)
-      'icon-allow-overlap': true,               // Avoid hiding overlapping icons
-      'text-field': ['get', 'name'],            // Show POI name (optional)
+      'icon-image': ['get', 'icon'],
+      'icon-size': 0.8, // Adjust icon size as needed
+      'icon-allow-overlap': true,
+      'text-field': ['get', 'name'],
       'text-font': ['Open Sans Semibold', 'Arial Unicode MS Bold'],
       'text-size': 14,
-      'text-offset': [0, 1.2],
-      'text-anchor': 'top',
+      'text-offset': [1.2, 0],        // horizontal shift (x = 1.2, y = 0)
+      'text-anchor': 'left',          // anchor text to the left of icon
       'text-optional': true,
     },
     paint: {
-      'text-color': '#DC3B45',                     // Changed to black for better contrast on white background
-      'text-halo-color': '#fff',
+      'text-color': ['get', 'color'], // Use dynamic color from POI properties
+      'text-halo-color': '#ffffff', // White halo for better visibility
       'text-halo-width': 5,
     },
+  });
+
+  // Add click event to open the URL in a new tab
+  map.on('click', 'poi-layer', (e) => {
+    const features = map.queryRenderedFeatures(e.point, { layers: ['poi-layer'] });
+    if (features.length) {
+      const url = features[0].properties.url;
+      if (url) {
+        window.open(url, '_blank'); // Open the URL in a new tab
+      }
+    }
+  });
+
+  // Change the cursor to a pointer when hovering over the POI layer
+  map.on('mouseenter', 'poi-layer', () => {
+    map.getCanvas().style.cursor = 'pointer';
+  });
+
+  // Reset the cursor when leaving the POI layer
+  map.on('mouseleave', 'poi-layer', () => {
+    map.getCanvas().style.cursor = '';
   });
 };

@@ -1,4 +1,4 @@
-import { setTimeout as sleep } from 'node:timers/promises'
+// import { setTimeout as sleep } from 'node:timers/promises'
 import { useState } from 'react'
 import { data, useNavigate, useSearchParams } from 'react-router'
 import { redirectWithSuccess } from 'remix-toast'
@@ -20,7 +20,7 @@ export const action = async ({ request, params }) => {
     throw data(null, { status: 404 })
   }
 
-  await sleep(1000)
+  // await sleep(1000)
   // remove the user from the list
   const updatedUsers = users.filter((u) => u.id !== user.id)
   users.length = 0

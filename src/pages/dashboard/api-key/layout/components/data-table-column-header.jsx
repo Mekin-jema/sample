@@ -25,10 +25,10 @@ export function DataTableColumnHeader({ column, title, className }) {
 
   return (
     <div className={cn('flex items-center space-x-2', className)}>
-      <DropdownMenu>
+      <DropdownMenu >
         <DropdownMenuTrigger asChild>
           <Button
-            variant="ghost"
+            variant="none"
             size="sm"
             className="data-[state=open]:bg-accent -ml-3 h-8"
           >
@@ -42,7 +42,7 @@ export function DataTableColumnHeader({ column, title, className }) {
             )}
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="start " className="bg-[#D19EDB] text-black">
+        <DropdownMenuContent align="start" className="bg-[#D19EDB] text-black" >
           <DropdownMenuItem
             onClick={() =>
               updateSort({
