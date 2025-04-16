@@ -143,7 +143,7 @@ const handleClearInput = () => {
           value={inputValue}
           onChange={handleChange}
           placeholder={placeholder}
-          className="w-[280px] py-2 pl-5 pr-8 border rounded-[9px] dark:text-black border-[#A91CD8]"
+          className="w-[280px] py-2 pl-5 pr-8 border rounded-[9px] font-sora text-gray-700 text-[15px] dark:text-black border-[#A91CD8]"
         />
 
         {/* Clear Input Button */}

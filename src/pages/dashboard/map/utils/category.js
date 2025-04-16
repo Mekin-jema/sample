@@ -6,19 +6,19 @@ import {
 } from "react-icons/fa";
 
 const COLORS = {
-  FOOD: 'rgba(192, 57, 43, 0.5)',         // Faded dark red
-  LODGING: 'rgba(173, 20, 87, 0.5)',      // Faded dark pink
-  SHOPPING: 'rgba(56, 142, 60, 0.5)',     // Faded dark green
-  NATURE: 'rgba(0, 137, 123, 0.5)',       // Faded dark teal
-  TRANSPORT: 'rgba(63, 81, 181, 0.5)',    // Faded indigo
-  HEALTH: 'rgba(123, 31, 162, 0.5)',      // Faded dark purple
-  EDUCATION: 'rgba(2, 136, 209, 0.5)',    // Faded dark blue
-  FITNESS: 'rgba(230, 74, 25, 0.5)',      // Faded deep orange
-  CULTURE: 'rgba(255, 160, 0, 0.5)',      // Faded amber
-  RELIGION: 'rgba(103, 58, 183, 0.5)',    // Faded deep purple
-  ENTERTAINMENT: 'rgba(216, 27, 96, 0.5)',// Faded pink
-  BUSINESS: 'rgba(96, 125, 139, 0.5)',    // Faded blue grey
-  RESIDENTIAL: 'rgba(124, 179, 66, 0.5)', // Faded light green
+  FOOD: 'rgba(192, 57, 43, 0.6)',         // Faded dark red
+  LODGING: 'rgba(173, 20, 87, 0.6)',      // Faded dark pink
+  SHOPPING: 'rgba(56, 142, 60, 0.6)',     // Faded dark green
+  NATURE: 'rgba(0, 137, 123, 0.6)',       // Faded dark teal
+  TRANSPORT: 'rgba(63, 81, 181, 0.6)',    // Faded indigo
+  HEALTH: 'rgba(123, 31, 162, 0.6)',      // Faded dark purple
+  EDUCATION: 'rgba(2, 136, 209, 0.6)',    // Faded dark blue
+  FITNESS: 'rgba(230, 74, 25, 0.6)',      // Faded deep orange
+  CULTURE: 'rgba(255, 160, 0, 0.6)',      // Faded amber
+  RELIGION: 'rgba(103, 58, 183, 0.6)',    // Faded deep purple
+  ENTERTAINMENT: 'rgba(216, 27, 96, 0.6)',// Faded pink
+  BUSINESS: 'rgba(96, 125, 139, 0.6)',    // Faded blue grey
+  RESIDENTIAL: 'rgba(124, 179, 66, 0.6)', // Faded light green
 };
 
 

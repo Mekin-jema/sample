@@ -17,7 +17,7 @@ export function AppSidebar({ ...props }) {
       {/* Conditionally render logo only when sidebar is expanded */}
       {state !== "collapsed" ? (
         <div className="flex justify-center items-center">
-          <img src={logo} alt="logo image" className="mt-2 w-[98.3px] h-[50.05px]" />
+          <img src={logo} alt="logo image" className="mt-2 w-[120px] h-[50.05px]" />
         </div>
       ):(
         <span className="h-[86px]">
@@ -28,7 +28,7 @@ export function AppSidebar({ ...props }) {
       <SidebarContent>
         <NavMain items={sidebarData.navMain[0].items} />
       </SidebarContent>
-      <SidebarFooter className="mb-3">
+      <SidebarFooter className="mb-1">
         <NavUser user={sidebarData.user} />
       </SidebarFooter>
       <SidebarRail />

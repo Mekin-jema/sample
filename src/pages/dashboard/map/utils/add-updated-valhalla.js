@@ -235,6 +235,7 @@ function drawRoute(map,profile) {
         "line-color": "#A91CD8",
         "line-width": 10,
         "line-opacity": 0.6,
+        "line-dasharray": [0.08, 1], // creates dotted pattern
       };
       break;
     case "pedestrian":
@@ -242,6 +243,7 @@ function drawRoute(map,profile) {
         "line-color": "#A91CD8",
         "line-width": 10,
         "line-opacity": 0.8,
+        "line-dasharray": [0.1, 1], // creates dotted pattern
       };
       break;
     case "motor_scooter":
@@ -274,6 +276,7 @@ function drawRoute(map,profile) {
       };
       break;
   }
+  
   if (!routeData) return;
 
 

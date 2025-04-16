@@ -45,19 +45,19 @@ export default function GeocodingInput({ map, setToggleGeocoding }) {
   };
 
   return (
-    <div className="relative p-2 w-[392px] flex items-center gap-1 top-3">
-      <div className="relative w-full">
+    <div className="relative p-2 w-[392px] flex items-center gap-1 ">
+      <div className="relative sm:w-full w-[350px]">
         <input
           type="text"
           value={inputValue}
           onChange={handleChange}
           placeholder="Search Ambalay Maps"
-          className="w-full py-3 shadow-lg pl-5 pr-12 border rounded-full dark:border-green-950 text-black focus:outline-none transition-all"
+          className="w-full py-3 shadow-xl mt-3  font-sora border-[1px] border-green-800 pl-5 pr-12   rounded-full  text-black focus:outline-none transition-all"
         />
 
         
         <MdDirections
-          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#0B57D0] cursor-pointer"
+          className="absolute right-3 top-9 transform -translate-y-1/2 text-[#0B57D0] cursor-pointer"
           size={24}
           onClick={() => setToggleGeocoding(true)}
         />

@@ -312,7 +312,7 @@ const Map = () => {
 
 
       <ToastContainer position="top-center" autoClose={10000} />
-      <div ref={mapContainer} className="absolute top-0 inset-0 w-full h-screen rounded-[18px]" />
+      <div ref={mapContainer} className="absolute top-0 inset-0 bg-white w-full h-screen rounded-[18px]" />
       <CategoryScroll categories={categories} activeCategory={activeCategory} handleCategoryClick={handleCategoryClick} />
       <div className="relative z-40">
         {showCategoryDetailPopup && pois.length > 0 ? (

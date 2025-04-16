@@ -178,7 +178,7 @@ const AddressBox = ({ route, setToggleGeocoding, profile, setProfile}) => {
                 < button
                  
                   title="Add Destination"
-                  className="rounded-full border-[3px] border-[#A91CD8] dark:border-white   flex items-center justify-center"
+                  className="rounded-full border-[2px] border-[#A91CD8] dark:border-white   flex items-center justify-center"
                   onClick={addWaypoint}
                 >
                   <Plus className="w-5 h-5 text-[#A91CD8]" />

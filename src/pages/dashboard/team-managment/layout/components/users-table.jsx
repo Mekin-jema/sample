@@ -39,7 +39,7 @@ export function UsersTable({ columns, data, pagination, facetedCounts }) {
       <DataTableToolbar table={table} facetedCounts={facetedCounts} />
       <div className="rounded-md border">
         <Table>
-          <TableHeader>
+          <TableHeader className="bg-[#D19EDB] text-black">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id} className="group/row">
                 {headerGroup.headers.map((header) => {
