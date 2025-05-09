@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ReactApexChart from "react-apexcharts";
 import { useTheme } from "../theme-provider";
-// import { useTheme } from 'next-themes'; // Assuming you're using shadcn/ui's ThemeProvider
 
 const generateData = (num, ranges) => {
   return Array.from(
@@ -12,38 +11,45 @@ const generateData = (num, ranges) => {
 
 const HeatMap = () => {
   const { theme } = useTheme();
-  console.log(theme);
+  const [chartOptions, setChartOptions] = useState(null);
 
-  const textColor = theme === "dark" ? "#FFFFFF" : "#000000";
+  useEffect(() => {
+    const isDark = theme === "dark";
 
-  const [state] = useState({
-    series: [
-      { name: "Bole", data: generateData(9, { min: 0, max: 100 }) },
-      { name: "Piazza", data: generateData(9, { min: 0, max: 100 }) },
-      { name: "Akaki", data: generateData(9, { min: 0, max: 100 }) },
-      { name: "Lideta", data: generateData(9, { min: 0, max: 100 }) },
-      { name: "Kolfe Keranio", data: generateData(9, { min: 0, max: 100 }) },
-      { name: "Yeka", data: generateData(9, { min: 0, max: 100 }) },
-      { name: "Addis Ketema", data: generateData(9, { min: 0, max: 100 }) },
-    ],
-    options: {
+    const textColor = isDark ? "#f0fdfa" : "#1e293b"; // emerald-50 / slate-800
+    const bgColor = isDark ? "hsl(172, 50%, 17%)" : "#f8fafc"; // your dark bg / slate-50
+    const gridColor = isDark ? "#0f766e" : "#e2e8f0"; // teal-700 / slate-200
+    const labelBg = isDark ? "#0f766e" : "#e0f2fe"; // teal-700 / sky-100
+
+    const options = {
       chart: {
         height: 350,
         type: "heatmap",
-        // foreColor: textColor,
-        // color: textColor,
+        foreColor: textColor,
+        background: bgColor,
+        toolbar: {
+          tools: {
+            download: true,
+            selection: true,
+            zoom: true,
+            zoomin: true,
+            zoomout: true,
+            pan: true,
+            reset: true,
+          },
+        },
       },
       plotOptions: {
         heatmap: {
-          shadeIntensity: 0.5,
-          radius: 0,
-          useFillColorAsStroke: true,
+          shadeIntensity: 0.4,
+          radius: 4,
+          useFillColorAsStroke: false,
           colorScale: {
             ranges: [
-              { from: 0, to: 20, name: "Low Requests", color: "#00A100" },
-              { from: 21, to: 50, name: "Moderate Requests", color: "#128FD9" },
-              { from: 51, to: 80, name: "High Requests", color: "#FFB200" },
-              { from: 81, to: 100, name: "Extreme Requests", color: "#FF0000" },
+              { from: 0, to: 20, name: "Low", color: "#99f6e4" }, // teal-200
+              { from: 21, to: 50, name: "Moderate", color: "#5eead4" }, // teal-400
+              { from: 51, to: 80, name: "High", color: "#34d399" }, // emerald-400
+              { from: 81, to: 100, name: "Extreme", color: "#f87171" }, // red-400
             ],
           },
         },
@@ -51,17 +57,24 @@ const HeatMap = () => {
       dataLabels: {
         enabled: true,
         style: {
-          colors: Array(9).fill(textColor), // Ensures all labels match text color
+          colors: [isDark ? "#f0fdfa" : "#0f172a"], // emerald-50 / slate-900
+          fontSize: "12px",
+          fontWeight: 500,
         },
       },
       stroke: {
         width: 1,
-        colors: ["transparent"], // Removes any stroke background influence
+        colors: [gridColor],
       },
       title: {
-        text: "API Request Heatmap Across Addis Ababa",
+        text: "Ambalay Maps – Request Heat Across Addis Ababa",
+        align: "center",
+        margin: 20,
         style: {
           color: textColor,
+          fontSize: "18px",
+          fontWeight: "bold",
+          fontFamily: "inherit",
         },
       },
       xaxis: {
@@ -76,30 +89,74 @@ const HeatMap = () => {
           "Aug",
           "Sep",
         ],
-        // labels: {
-        //   style: {
-        //     colors: textColor,
-        //   },
-        // },
+        labels: {
+          style: {
+            colors: Array(9).fill(textColor),
+            fontSize: "12px",
+          },
+        },
+        axisBorder: {
+          show: true,
+          color: gridColor,
+        },
+        axisTicks: {
+          color: gridColor,
+        },
       },
       yaxis: {
         labels: {
           style: {
-            // colors: textColor,
+            colors: Array(7).fill(textColor),
+            fontSize: "12px",
           },
         },
       },
-      // tooltip: {
-      //   theme: theme,
-      // },
-    },
-  });
+      grid: {
+        borderColor: gridColor,
+        strokeDashArray: 3,
+        position: "back",
+      },
+      tooltip: {
+        theme: isDark ? "dark" : "light",
+        style: {
+          fontSize: "12px",
+          fontFamily: "inherit",
+        },
+      },
+      legend: {
+        position: "bottom",
+        horizontalAlign: "center",
+        labels: {
+          colors: textColor,
+        },
+        markers: {
+          width: 12,
+          height: 12,
+          radius: 4,
+        },
+      },
+    };
+
+    setChartOptions(options);
+  }, [theme]);
+
+  const series = [
+    { name: "Bole", data: generateData(9, { min: 0, max: 100 }) },
+    { name: "Piazza", data: generateData(9, { min: 0, max: 100 }) },
+    { name: "Akaki", data: generateData(9, { min: 0, max: 100 }) },
+    { name: "Lideta", data: generateData(9, { min: 0, max: 100 }) },
+    { name: "Kolfe Keranio", data: generateData(9, { min: 0, max: 100 }) },
+    { name: "Yeka", data: generateData(9, { min: 0, max: 100 }) },
+    { name: "Addis Ketema", data: generateData(9, { min: 0, max: 100 }) },
+  ];
+
+  if (!chartOptions) return null;
 
   return (
-    <div style={{ padding: "10px", borderRadius: "10px" }}>
+    <div className="w-full p-4 rounded-xl border border-border bg-card shadow-lg">
       <ReactApexChart
-        options={state.options}
-        series={state.series}
+        options={chartOptions}
+        series={series}
         type="heatmap"
         height={350}
       />

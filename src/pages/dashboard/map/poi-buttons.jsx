@@ -96,7 +96,7 @@ const CategoryScroll = ({
             }`}
             disabled={loading}
           >
-            <category.IconComponent size={16} />
+            <category.IconComponent size={16} color="#62666B" />
             <span className="text-sm">{category.name}</span>
           </button>
         ))}
