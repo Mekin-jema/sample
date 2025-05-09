@@ -45,7 +45,7 @@ export const addPOILayerToMap = (map, pois) => {
       'text-optional': true,
     },
     paint: {
-      'text-color': ['get', 'color'], // Use dynamic color from POI properties
+      'text-color': "gray", // Use dynamic color from POI properties
       'text-halo-color': 'rgba(247, 247, 247, 0.3) ',
       'text-halo-width': 5,
     },

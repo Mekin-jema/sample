@@ -2,8 +2,21 @@ import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Table, TableHeader, TableRow, TableHead, TableCell, TableBody } from "@/components/ui/table";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Table,
+  TableHeader,
+  TableRow,
+  TableHead,
+  TableCell,
+  TableBody,
+} from "@/components/ui/table";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Download, Plus, Trash } from "lucide-react";
 import { Main } from "@/pages/dashboard/main";
 import { useTable } from "react-table"; // Import react-table
@@ -23,9 +36,19 @@ const BillingSubscription = () => {
   const [confirmDelete, setConfirmDelete] = useState(null);
 
   const plans = [
-    { name: "Basic - $10/month", description: "Ideal for individuals. Includes basic features." },
-    { name: "Pro - $20/month", description: "For small teams. Includes advanced features." },
-    { name: "Enterprise - $50/month", description: "For large teams. Includes all features and priority support." },
+    {
+      name: "Basic - $10/month",
+      description: "Ideal for individuals. Includes basic features.",
+    },
+    {
+      name: "Pro - $20/month",
+      description: "For small teams. Includes advanced features.",
+    },
+    {
+      name: "Enterprise - $50/month",
+      description:
+        "For large teams. Includes all features and priority support.",
+    },
   ];
 
   const invoices = [
@@ -47,7 +70,9 @@ const BillingSubscription = () => {
   };
 
   const confirmDeletion = () => {
-    setPaymentMethods(paymentMethods.filter((method) => method.id !== confirmDelete));
+    setPaymentMethods(
+      paymentMethods.filter((method) => method.id !== confirmDelete)
+    );
     setConfirmDelete(null);
   };
 
@@ -95,29 +120,30 @@ const BillingSubscription = () => {
   const data = React.useMemo(() => invoices, [invoices]);
 
   // Use react-table hook
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({ columns, data });
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
+    useTable({ columns, data });
 
   return (
     <Main>
-            <Header>
-                        {/* <TopNav links={topNav} /> */}
-                        <div className="ml-auto flex items-center space-x-4">
-                          <Search />
-                          <DarkModeToggle />
-                          <NavUser />
-                        </div>
-                      </Header>
+      <Header>
+        {/* <TopNav links={topNav} /> */}
+        <div className="ml-auto flex items-center space-x-4">
+          <Search />
+          <DarkModeToggle />
+          {/* <NavUser /> */}
+        </div>
+      </Header>
       <Card>
         <CardHeader>
           <CardTitle>Current Plan</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <p className="text-lg font-semibold">{currentPlan}</p>
-          <Select onValueChange={(value) => setCurrentPlan(value)}  >
+          <Select onValueChange={(value) => setCurrentPlan(value)}>
             <SelectTrigger className="w-[200px] ">
               <SelectValue placeholder="Select a plan " />
             </SelectTrigger>
-            <SelectContent className="bg-slate-600 text-white" >
+            <SelectContent className="bg-slate-600 text-white">
               {plans.map((plan, index) => (
                 <SelectItem key={index} value={plan.name}>
                   <div>
@@ -154,9 +180,7 @@ const BillingSubscription = () => {
                 return (
                   <TableRow key={row.id}>
                     {row.cells.map((cell) => (
-                      <TableCell key={cell.id}>
-                        {cell.render("Cell")}
-                      </TableCell>
+                      <TableCell key={cell.id}>{cell.render("Cell")}</TableCell>
                     ))}
                   </TableRow>
                 );
@@ -172,14 +196,27 @@ const BillingSubscription = () => {
         </CardHeader>
         <CardContent className="space-y-4">
           {paymentMethods.map((method) => (
-            <div key={method.id} className="flex items-center justify-between p-3 rounded-lg">
-              <p className="text-sm">{method.type} - {method.details}</p>
-              <Button variant="outline" size="sm" onClick={() => handleRemovePaymentMethod(method.id)} className="border-none">
+            <div
+              key={method.id}
+              className="flex items-center justify-between p-3 rounded-lg"
+            >
+              <p className="text-sm">
+                {method.type} - {method.details}
+              </p>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => handleRemovePaymentMethod(method.id)}
+                className="border-none"
+              >
                 <Trash className="h-4 w-4 text-red-700" />
               </Button>
             </div>
           ))}
-          <Button variant="outline" onClick={() => setShowAddPaymentMethod(true)}>
+          <Button
+            variant="outline"
+            onClick={() => setShowAddPaymentMethod(true)}
+          >
             <Plus className="mr-2 h-4 w-4" /> Add Payment Method
           </Button>
         </CardContent>
@@ -194,8 +231,20 @@ const BillingSubscription = () => {
             <CardContent className="space-y-4">
               <p>Are you sure you want to delete this payment method?</p>
               <div className="flex justify-end gap-2">
-                <Button variant="outline" className="bg-yellow-300" onClick={() => setConfirmDelete(null)}>Cancel</Button>
-                <Button variant="destructive" className="bg-gray-600" onClick={confirmDeletion}>Delete</Button>
+                <Button
+                  variant="outline"
+                  className="bg-yellow-300"
+                  onClick={() => setConfirmDelete(null)}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  variant="destructive"
+                  className="bg-gray-600"
+                  onClick={confirmDeletion}
+                >
+                  Delete
+                </Button>
               </div>
             </CardContent>
           </Card>
@@ -209,11 +258,31 @@ const BillingSubscription = () => {
               <CardTitle>Add Payment Method</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <Input placeholder="Enter Payment Type" value={newPaymentType} onChange={(e) => setNewPaymentType(e.target.value)} />
-              <Input placeholder="Enter Payment Details" value={newPaymentDetails} onChange={(e) => setNewPaymentDetails(e.target.value)} />
+              <Input
+                placeholder="Enter Payment Type"
+                value={newPaymentType}
+                onChange={(e) => setNewPaymentType(e.target.value)}
+              />
+              <Input
+                placeholder="Enter Payment Details"
+                value={newPaymentDetails}
+                onChange={(e) => setNewPaymentDetails(e.target.value)}
+              />
               <div className="flex justify-end gap-2">
-                <Button variant="" className="dark:text-black bg-slate-400" onClick={() => setShowAddPaymentMethod(false)}>Cancel</Button>
-                <Button variant="" className="dark:text-black bg-slate-400" onClick={handleAddPaymentMethod}>Save</Button>
+                <Button
+                  variant=""
+                  className="dark:text-black bg-slate-400"
+                  onClick={() => setShowAddPaymentMethod(false)}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  variant=""
+                  className="dark:text-black bg-slate-400"
+                  onClick={handleAddPaymentMethod}
+                >
+                  Save
+                </Button>
               </div>
             </CardContent>
           </Card>
@@ -234,9 +303,13 @@ const BillingSubscription = () => {
             <Button onClick={handlePromoCodeApply}>Apply</Button>
           </div>
           {isPromoValid ? (
-            <p className="text-sm text-green-600">Promo code applied successfully!</p>
+            <p className="text-sm text-green-600">
+              Promo code applied successfully!
+            </p>
           ) : (
-            promoCode && <p className="text-sm text-red-600">Invalid promo code.</p>
+            promoCode && (
+              <p className="text-sm text-red-600">Invalid promo code.</p>
+            )
           )}
         </CardContent>
       </Card>

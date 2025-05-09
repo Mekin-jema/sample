@@ -11,19 +11,18 @@ import PricingPlans from "./plan";
 const Board = () => {
   return (
     <div className="rounded-lg shadow-md p-2 ml-3">
-
       <Header>
         {/* <TopNav links={topNav} /> */}
         <div className="ml-auto flex items-center space-x-4">
           <Search />
           <DarkModeToggle />
-          <NavUser />
+          {/* <NavUser /> */}
         </div>
       </Header>
       <Billing />
 
       {/* Subscription Plan Section */}
-     <PricingPlans />
+      <PricingPlans />
 
       {/* Usage Statistics Section */}
       {/* <UsageStatistics /> */}

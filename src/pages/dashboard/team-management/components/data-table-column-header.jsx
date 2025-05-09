@@ -1,0 +1,81 @@
+import {
+  ArrowDownIcon,
+  ArrowUpIcon,
+  CaretSortIcon,
+  EyeNoneIcon,
+} from "@radix-ui/react-icons";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { cn } from "@/lib/utils";
+import { useDataTableState } from "@/hooks/use-data-table-state";
+
+export function DataTableColumnHeader({ column, title, className }) {
+  const { sort, updateSort } = useDataTableState();
+
+  if (!column.getCanSort()) {
+    return <div className={cn(className, "text-xs")}>{title}</div>;
+  }
+
+  return (
+    <div className={cn("flex items-center space-x-2", className)}>
+      <DropdownMenu className="bg-transparent">
+        <DropdownMenuTrigger asChild>
+          <Button
+            variant="normal"
+            size="sm"
+            className="data-[state=open]:bg-inherit -ml-3 h-8 "
+          >
+            <span>{title}</span>
+            {column.id === sort.sort_by && sort.sort_order === "desc" ? (
+              <ArrowDownIcon className="h-4 w-4" />
+            ) : column.id === sort.sort_by && sort.sort_order === "asc" ? (
+              <ArrowUpIcon className="h-4 w-4" />
+            ) : (
+              <CaretSortIcon className="h-4 w-4" />
+            )}
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="top" className="bg-[#D19EDB] text-black">
+          <DropdownMenuItem
+            className="hover:bg-white  hover:text-black dark:hover:bg-white dark:hover:text-black"
+            onClick={() =>
+              updateSort({
+                sort_by: column.id,
+                sort_order: "asc",
+              })
+            }
+          >
+            <ArrowUpIcon className="text-muted-foreground/70 mr-2 h-3.5 w-3.5" />
+            Asc
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            className="hover:bg-white  hover:text-black dark:hover:bg-white dark:hover:text-black"
+            onClick={() =>
+              updateSort({
+                sort_by: column.id,
+                sort_order: "desc",
+              })
+            }
+          >
+            <ArrowDownIcon className="text-muted-foreground/70 mr-2 h-3.5 w-3.5" />
+            Desc
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem
+            onClick={() => column.toggleVisibility(false)}
+            className="hover:bg-white  hover:text-black dark:hover:bg-white dark:hover:text-black"
+          >
+            <EyeNoneIcon className="text-muted-foreground/70 mr-2 h-3.5 w-3.5" />
+            Hide
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
+  );
+}

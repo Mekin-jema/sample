@@ -13,22 +13,24 @@ import { useSidebar } from "@/components/ui/sidebar"; // Ensure this path is cor
 export function AppSidebar({ ...props }) {
   const { state } = useSidebar(); // Get sidebar state (expanded or collapsed)
   return (
-    <Sidebar collapsible="icon" {...props}  className="dark:bg-[#021815] bg-[#16423C] text-white mx-3 mt-3  rounded-xl">
+    <Sidebar
+      collapsible="icon"
+      {...props}
+      className="dark:bg-[#021815] bg-[#16423C] text-white mx-3 mt-3  rounded-xl"
+    >
       {/* Conditionally render logo only when sidebar is expanded */}
       {state !== "collapsed" ? (
-        <div className="flex justify-center items-center">
-          <img src={logo} alt="logo image" className="mt-2 w-[120px] h-[50.05px]" />
+        <div className="flex justify-center items-center h-[70px]">
+          <img src={logo} alt="logo image" className="mt-2 w-[98.3px] h-full" />
         </div>
-      ):(
-        <span className="h-[86px]">
-
-        </span>
+      ) : (
+        <span className="h-[86px]"></span>
       )}
 
       <SidebarContent>
         <NavMain items={sidebarData.navMain[0].items} />
       </SidebarContent>
-      <SidebarFooter className="mb-1">
+      <SidebarFooter className="mb-3">
         <NavUser user={sidebarData.user} />
       </SidebarFooter>
       <SidebarRail />

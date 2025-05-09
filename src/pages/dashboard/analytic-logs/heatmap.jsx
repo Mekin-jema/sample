@@ -1,34 +1,37 @@
-import React, { useState } from 'react';
-import ReactApexChart from 'react-apexcharts';
-import { useTheme } from 'next-themes'; // Assuming you're using shadcn/ui's ThemeProvider
+import React, { useState } from "react";
+import ReactApexChart from "react-apexcharts";
+import { useTheme } from "../theme-provider";
+// import { useTheme } from 'next-themes'; // Assuming you're using shadcn/ui's ThemeProvider
 
 const generateData = (num, ranges) => {
-  return Array.from({ length: num }, () =>
-    Math.floor(Math.random() * (ranges.max - ranges.min + 1)) + ranges.min
+  return Array.from(
+    { length: num },
+    () => Math.floor(Math.random() * (ranges.max - ranges.min + 1)) + ranges.min
   );
 };
 
 const HeatMap = () => {
-  const { theme } = useTheme(); // Get the current theme
-  const isDarkMode = theme === 'dark'; // Check if dark mode is active
+  const { theme } = useTheme();
+  console.log(theme);
 
-  const textColor = isDarkMode ? '#FFFFFF' : '#000000';
+  const textColor = theme === "dark" ? "#FFFFFF" : "#000000";
 
   const [state] = useState({
     series: [
-      { name: 'Bole', data: generateData(9, { min: 0, max: 100 }) },
-      { name: 'Piazza', data: generateData(9, { min: 0, max: 100 }) },
-      { name: 'Akaki', data: generateData(9, { min: 0, max: 100 }) },
-      { name: 'Lideta', data: generateData(9, { min: 0, max: 100 }) },
-      { name: 'Kolfe Keranio', data: generateData(9, { min: 0, max: 100 }) },
-      { name: 'Yeka', data: generateData(9, { min: 0, max: 100 }) },
-      { name: 'Addis Ketema', data: generateData(9, { min: 0, max: 100 }) }
+      { name: "Bole", data: generateData(9, { min: 0, max: 100 }) },
+      { name: "Piazza", data: generateData(9, { min: 0, max: 100 }) },
+      { name: "Akaki", data: generateData(9, { min: 0, max: 100 }) },
+      { name: "Lideta", data: generateData(9, { min: 0, max: 100 }) },
+      { name: "Kolfe Keranio", data: generateData(9, { min: 0, max: 100 }) },
+      { name: "Yeka", data: generateData(9, { min: 0, max: 100 }) },
+      { name: "Addis Ketema", data: generateData(9, { min: 0, max: 100 }) },
     ],
     options: {
       chart: {
         height: 350,
-        type: 'heatmap',
-        foreColor: textColor
+        type: "heatmap",
+        // foreColor: textColor,
+        // color: textColor,
       },
       plotOptions: {
         heatmap: {
@@ -37,54 +40,69 @@ const HeatMap = () => {
           useFillColorAsStroke: true,
           colorScale: {
             ranges: [
-              { from: 0, to: 20, name: 'Low Requests', color: '#00A100' },
-              { from: 21, to: 50, name: 'Moderate Requests', color: '#128FD9' },
-              { from: 51, to: 80, name: 'High Requests', color: '#FFB200' },
-              { from: 81, to: 100, name: 'Extreme Requests', color: '#FF0000' }
-            ]
-          }
-        }
+              { from: 0, to: 20, name: "Low Requests", color: "#00A100" },
+              { from: 21, to: 50, name: "Moderate Requests", color: "#128FD9" },
+              { from: 51, to: 80, name: "High Requests", color: "#FFB200" },
+              { from: 81, to: 100, name: "Extreme Requests", color: "#FF0000" },
+            ],
+          },
+        },
       },
       dataLabels: {
         enabled: true,
         style: {
-          colors: Array(9).fill(textColor) // Ensures all labels match text color
-        }
+          colors: Array(9).fill(textColor), // Ensures all labels match text color
+        },
       },
       stroke: {
         width: 1,
-        colors: ['transparent'] // Removes any stroke background influence
+        colors: ["transparent"], // Removes any stroke background influence
       },
       title: {
-        text: 'API Request Heatmap Across Addis Ababa',
+        text: "API Request Heatmap Across Addis Ababa",
         style: {
-          color: textColor
-        }
+          color: textColor,
+        },
       },
       xaxis: {
-        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
-        labels: {
-          style: {
-            colors: textColor
-          }
-        }
+        categories: [
+          "Jan",
+          "Feb",
+          "Mar",
+          "Apr",
+          "May",
+          "Jun",
+          "Jul",
+          "Aug",
+          "Sep",
+        ],
+        // labels: {
+        //   style: {
+        //     colors: textColor,
+        //   },
+        // },
       },
       yaxis: {
         labels: {
           style: {
-            colors: textColor
-          }
-        }
+            // colors: textColor,
+          },
+        },
       },
-      tooltip: {
-        theme: isDarkMode ? 'dark' : 'light'
-      }
-    }
+      // tooltip: {
+      //   theme: theme,
+      // },
+    },
   });
 
   return (
-    <div style={{ padding: '10px', borderRadius: '10px' }}>
-      <ReactApexChart options={state.options} series={state.series} type="heatmap" height={350} />
+    <div style={{ padding: "10px", borderRadius: "10px" }}>
+      <ReactApexChart
+        options={state.options}
+        series={state.series}
+        type="heatmap"
+        height={350}
+      />
     </div>
   );
 };

@@ -28,20 +28,18 @@ import { Outlet, useLocation } from "react-router-dom";
 
 export default function DashboardMainPage() {
   return (
-
     <SidebarProvider className="dark:bg-[#16423C] p-3 dark:pt-1 font-sora ">
-        <SearchProvider className>
-        <AppSidebar  />
-        <SidebarInset className="ml-3  ">
+      <SearchProvider className>
+        <AppSidebar />
+        <SidebarInset className="ml-1 mt-2  ">
           {/* <Header /> */}
-     
-          {/* <newHeader /> */}
-          <div className=" dark:bg-[#021815] rounded-xl">
 
-          <Outlet />
+          {/* <newHeader /> */}
+          <div className=" dark:bg-[#021815] rounded-xl ml-2 relative">
+            <Outlet />
           </div>
         </SidebarInset>
-    </SearchProvider>
-      </SidebarProvider>
+      </SearchProvider>
+    </SidebarProvider>
   );
 }

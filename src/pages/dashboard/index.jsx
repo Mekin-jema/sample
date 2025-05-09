@@ -13,10 +13,8 @@
  * - Premium: Component for premium features or subscriptions.
  */
 
-import AccountSettings from "./team-managment/account-settings"; // Account settings component
-import ApiClients from "./api-key/api-keys"; // API clients management component
 import Board from "./board/dashboard"; // Dashboard metrics and controls component
 import Map from "./map/map"; // Interactive map component
 
 // Export all components
-export { AccountSettings, ApiClients,  Board, Map };
+export { Board, Map };

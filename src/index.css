@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Sora:wght@100..800&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Sora:wght@100..800&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -16,12 +16,12 @@
   }
 
   .dark {
-    --background:172, 50%, 17%;
+    --background: 172, 50%, 17%;
     --foreground: 240 4.8% 95.9%;
     --primary: red;
     --primary-foreground: 0 0% 100%;
-    --accent: 240 3.7% 15.9%;
-    --accent-foreground: 240 4.8% 95.9%;
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
     --border: 240 3.7% 15.9%;
     --ring: 217.2 91.2% 59.8%;
   }

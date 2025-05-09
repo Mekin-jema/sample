@@ -2,7 +2,17 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Main } from "@/pages/dashboard/main";
-import { BarChart, LineChart, Line, CartesianGrid, XAxis, YAxis, Legend, Tooltip, Bar } from "recharts";
+import {
+  BarChart,
+  LineChart,
+  Line,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+  Legend,
+  Tooltip,
+  Bar,
+} from "recharts";
 import { Download } from "lucide-react";
 import HeatMap from "./heatmap";
 // import Header from "@/components/layout/Header";
@@ -20,10 +30,34 @@ const apiUsageData = [
 ];
 
 const errorLogs = [
-  { timestamp: "2024-02-20 12:30:45", requestType: "GET", errorMessage: "Timeout error", responseTime: "500ms", detailedLog: "Request took too long." },
-  { timestamp: "2024-02-21 14:22:30", requestType: "POST", errorMessage: "Invalid JSON format", responseTime: "200ms", detailedLog: "Malformed request body." },
-  { timestamp: "2024-02-22 10:05:12", requestType: "GET", errorMessage: "Unauthorized", responseTime: "150ms", detailedLog: "API key missing." },
-  { timestamp: "2024-02-23 08:50:55", requestType: "DELETE", errorMessage: "Resource not found", responseTime: "180ms", detailedLog: "Attempt to delete non-existent item." },
+  {
+    timestamp: "2024-02-20 12:30:45",
+    requestType: "GET",
+    errorMessage: "Timeout error",
+    responseTime: "500ms",
+    detailedLog: "Request took too long.",
+  },
+  {
+    timestamp: "2024-02-21 14:22:30",
+    requestType: "POST",
+    errorMessage: "Invalid JSON format",
+    responseTime: "200ms",
+    detailedLog: "Malformed request body.",
+  },
+  {
+    timestamp: "2024-02-22 10:05:12",
+    requestType: "GET",
+    errorMessage: "Unauthorized",
+    responseTime: "150ms",
+    detailedLog: "API key missing.",
+  },
+  {
+    timestamp: "2024-02-23 08:50:55",
+    requestType: "DELETE",
+    errorMessage: "Resource not found",
+    responseTime: "180ms",
+    detailedLog: "Attempt to delete non-existent item.",
+  },
 ];
 
 const geographicData = [
@@ -43,18 +77,18 @@ const AnalyticsLogs = () => {
 
   return (
     <Main>
-             <Header>
-            {/* <TopNav links={topNav} /> */}
-            <div className="ml-auto flex items-center space-x-4">
-              <Search />
-              <DarkModeToggle />
-              <NavUser />
-            </div>
-          </Header>
+      <Header>
+        {/* <TopNav links={topNav} /> */}
+        <div className="ml-auto flex items-center space-x-4">
+          <Search />
+          <DarkModeToggle />
+          {/* <NavUser /> */}
+        </div>
+      </Header>
       <div className="mb-2 flex items-center justify-between">
         <h2 className="text-xl font-bold">Analytics & Logs</h2>
         <div className="flex space-x-4">
-          <Button className="bg-[#00432F] hover:bg-[#237a60]" onClick={handleDownloadReport}>
+          <Button className="" onClick={handleDownloadReport}>
             <Download className="mr-2 h-4 w-4" />
             Download Report
           </Button>
@@ -62,35 +96,37 @@ const AnalyticsLogs = () => {
       </div>
 
       <Tabs defaultValue="analytics" className="space-y-4">
-        <TabsList className="flex space-x-4 border-b">
+        <TabsList className="flex space-x-4">
           <TabsTrigger
             value="analytics"
-            className="  data-[state=active]:text-[#00432f] data-[state=active]:font-bold data-[state=active]:underline data-[state=active]:underline-offset-4"
+            className="  dark:data-[state=active]:text-white dark:data-[state=active]:border-white data-[state=active]:font-bold data-[state=active]:hover:border-b-2 border-green-800 animate "
           >
             Analytics
           </TabsTrigger>
           <TabsTrigger
             value="error-logs"
-            className="  data-[state=active]:text-[#00432f] data-[state=active]:font-bold data-[state=active]:underline data-[state=active]:underline-offset-4"
+            className="  dark:data-[state=active]:text-white dark:data-[state=active]:border-white data-[state=active]:font-bold data-[state=active]:hover:border-b-2 border-green-800 animate "
           >
             Error Logs
           </TabsTrigger>
           <TabsTrigger
             value="geographic-usage"
-            className="  data-[state=active]:text-[#00432f] data-[state=active]:font-bold data-[state=active]:underline data-[state=active]:underline-offset-4"
+            className="  dark:data-[state=active]:text-white dark:data-[state=active]:border-white data-[state=active]:font-bold data-[state=active]:hover:border-b-2 border-green-800 animate "
           >
             Geographic Usage
           </TabsTrigger>
           <TabsTrigger
             value="heatmap"
-            className="  data-[state=active]:text-[#00432f] data-[state=active]:font-bold data-[state=active]:underline data-[state=active]:underline-offset-4"
+            className="  dark:data-[state=active]:text-white dark:data-[state=active]:border-white data-[state=active]:font-bold data-[state=active]:hover:border-b-2 border-green-800 animate "
           >
             Heatmap
           </TabsTrigger>
         </TabsList>
 
         <TabsContent value="analytics" className="space-y-4">
-          <h2 className="text-xl font-bold">Real-time API Usage Metrics</h2>
+          <h2 className="text-xl font-bold dark:text-white text-black">
+            Real-time API Usage Metrics
+          </h2>
           <LineChart width={800} height={300} data={apiUsageData}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="date" />

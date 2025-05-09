@@ -4,6 +4,9 @@ import { Input } from "@/components/ui/input";
 import Papa from "papaparse";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
+import { DarkModeToggle } from "../navbar/toggle-theme";
+import { Search } from "../navbar/search";
+import { Header } from "../navbar/main-header";
 
 const GeocodingService = () => {
   const [addresses, setAddresses] = useState([
@@ -40,9 +43,7 @@ const GeocodingService = () => {
     const geocodeResults = await Promise.all(addresses.map(fetchGeocode));
 
     // Update recent requests (keep last 10)
-    setRecentRequests((prev) =>
-      [...geocodeResults, ...prev].slice(0, 10)
-    );
+    setRecentRequests((prev) => [...geocodeResults, ...prev].slice(0, 10));
 
     setAddresses([]);
   };
@@ -64,19 +65,36 @@ const GeocodingService = () => {
       const worksheet = XLSX.utils.json_to_sheet(recentRequests);
       const workbook = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(workbook, worksheet, "Geocode Results");
-      const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
-      const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
+      const excelBuffer = XLSX.write(workbook, {
+        bookType: "xlsx",
+        type: "array",
+      });
+      const blob = new Blob([excelBuffer], {
+        type: "application/octet-stream",
+      });
       saveAs(blob, "geocode_results.xlsx");
     }
   };
 
   return (
     <div className="p-6 space-y-6">
+      <Header>
+        {/* <TopNav links={topNav} /> */}
+        <div className="ml-auto flex items-center space-x-4">
+          <Search />
+          <DarkModeToggle />
+          {/* <NavUser /> */}
+        </div>
+      </Header>
       {/* File Upload */}
       <div className="border p-4 rounded-md">
         <h2 className="text-lg font-semibold">Bulk Geocoding</h2>
         <Input type="file" accept=".csv" onChange={handleFileUpload} />
-        <Button className="bg-[#00432F] hover:bg-[#237a60] text-white mt-3"  onClick={processGeocoding} disabled={addresses.length === 0}>
+        <Button
+          className="bg-[#00432F] hover:bg-[#237a60] text-white mt-3"
+          onClick={processGeocoding}
+          disabled={addresses.length === 0}
+        >
           Process Geocoding
         </Button>
       </div>
@@ -112,9 +130,24 @@ const GeocodingService = () => {
       <div className="border p-4 rounded-md">
         <h2 className="text-lg font-semibold">Export Data</h2>
         <div className="flex space-x-2 mt-3">
-          <Button className="bg-[#00432F] hover:bg-[#237a60] text-white" onClick={() => exportData("csv")}>Export CSV</Button>
-          <Button className="bg-[#00432F] hover:bg-[#237a60] text-white" onClick={() => exportData("json")}>Export JSON</Button>
-          <Button className="bg-[#00432F] hover:bg-[#237a60] text-white" onClick={() => exportData("excel")}>Export Excel</Button>
+          <Button
+            className="bg-[#00432F] hover:bg-[#237a60] text-white"
+            onClick={() => exportData("csv")}
+          >
+            Export CSV
+          </Button>
+          <Button
+            className="bg-[#00432F] hover:bg-[#237a60] text-white"
+            onClick={() => exportData("json")}
+          >
+            Export JSON
+          </Button>
+          <Button
+            className="bg-[#00432F] hover:bg-[#237a60] text-white"
+            onClick={() => exportData("excel")}
+          >
+            Export Excel
+          </Button>
         </div>
       </div>
     </div>
