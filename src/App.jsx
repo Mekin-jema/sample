@@ -74,13 +74,13 @@ const router = createBrowserRouter([
             path: ":user/delete",
             element: <UserDelete />,
             loader: DeleteLoader,
-            // errorElement: <NotFoundError />,
+            errorElement: <NotFoundError />,
           },
           {
             path: ":user/update",
             element: <UserUpdate />,
             loader: UpdateLoader,
-            // errorElement: <NotFoundError />,
+            errorElement: <NotFoundError />,
           },
         ],
       },
@@ -90,7 +90,7 @@ const router = createBrowserRouter([
   { path: "/otp", element: <Otp /> },
   { path: "/signup", element: <SignUp /> },
   { path: "/forgot-password", element: <ForgotPassword /> },
-  // { path: "*", element: <Navigate to="/404" replace /> },
+  { path: "*", element: <Navigate to="/404" replace /> },
 ]);
 
 function App() {
