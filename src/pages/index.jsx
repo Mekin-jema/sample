@@ -29,7 +29,7 @@ export default function Home() {
               Beta Release
             </Badge>
             <Badge variant="outline" className="text-sm font-medium">
-              v2.1.0
+              v1.1.0
             </Badge>
           </div>
         </CardHeader>
