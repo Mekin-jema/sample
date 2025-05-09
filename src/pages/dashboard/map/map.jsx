@@ -189,7 +189,7 @@ const Map = () => {
       try {
         const valhallaRoute = await getDefaultRoute(waypoints, profile);
         const routesInfo = await getRouteInfo(waypoints);
-        setRoute(routesInfo);
+        setRoute(routesInfo.routes[0]);
         addUpdatedValhalla(map, valhallaRoute, waypoints, dispatch, profile);
       } catch (error) {
         console.error("Error fetching routes:", error.message);
