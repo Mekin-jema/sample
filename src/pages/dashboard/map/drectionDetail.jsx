@@ -13,6 +13,7 @@ import { Volume2, VolumeX } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 import { DIRECTION_ARROWS } from "../constants/TurnByTurnArrows";
+import { useTheme } from "../theme-provider";
 
 // Text-to-Speech Initialization
 const synth = window.speechSynthesis;
@@ -38,6 +39,7 @@ const speakText = (text) => {
 
 const RenderDirectionDetail = ({ map, route }) => {
   const { waypoints } = useSelector((state) => state.map);
+  const { theme } = useTheme();
   const [isMuted, setIsMuted] = React.useState(false);
   const steps = route?.legs[0]?.steps || [];
 
@@ -153,7 +155,7 @@ const RenderDirectionDetail = ({ map, route }) => {
               return (
                 <div
                   key={idx}
-                  className={`py-4 px-4 hover:bg-primary cursor-pointer transition-colors ${
+                  className={`py-4 px-4 dark:hover:bg-[#26645c] hover:bg-slate-200 cursor-pointer transition-colors ${
                     waypoints.some(
                       (wp) =>
                         wp.latitude === step.maneuver.location[1] &&
@@ -192,7 +194,10 @@ const RenderDirectionDetail = ({ map, route }) => {
                           );
                         }}
                       >
-                        <Volume2 className="h-4 w-4" />
+                        <Volume2
+                          color={`${theme === "dark" ? "white" : "black"}`}
+                          className="h-4 w-4 dark:hover:text-black"
+                        />
                       </Button>
                     )}
                   </div>
