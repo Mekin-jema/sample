@@ -1,13 +1,14 @@
 export default async function getPlaces(query) {
-
   try {
-    const response = await fetch(
-      `https://nominatim.openstreetmap.org/search?format=json&q=${query}&countrycodes=ET`
-    );
+    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${query}&countrycodes=ET`;
+    const corsUrl = `https://corsproxy.io/?${encodeURIComponent(url)}`;
 
+    const response = await fetch(corsUrl);
+    if (!response.ok) throw new Error("Failed to fetch");
 
-    return response.json();
+    return await response.json();
   } catch (error) {
     console.error("Error fetching Ethiopian places:", error);
+    return [];
   }
 }

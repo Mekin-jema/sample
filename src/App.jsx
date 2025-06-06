@@ -40,11 +40,16 @@ import Otp from "./pages/auth/otp/route";
 // Error page
 import NotFoundError from "./pages/error/404";
 import UserUpdate from "./pages/dashboard/team-management/update/update";
+import MapWithElevation from "./pages/dashboard/map/sample-map";
 import Home from "./pages";
 
 const router = createBrowserRouter([
   { path: "/404", element: <NotFoundError /> },
-  { path: "/", element: <Home /> },
+  ,
+  {
+    path: "/",
+    element: <Home />,
+  },
   {
     path: "/dashboard",
     element: <DashboardMainPage />,
@@ -76,13 +81,13 @@ const router = createBrowserRouter([
             path: ":user/delete",
             element: <UserDelete />,
             loader: DeleteLoader,
-            errorElement: <NotFoundError />,
+            // errorElement: <NotFoundError />,
           },
           {
             path: ":user/update",
             element: <UserUpdate />,
             loader: UpdateLoader,
-            errorElement: <NotFoundError />,
+            // errorElement: <NotFoundError />,
           },
         ],
       },

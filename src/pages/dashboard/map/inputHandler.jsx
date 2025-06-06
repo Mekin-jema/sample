@@ -17,7 +17,7 @@ import {
   MdOutlineAirplanemodeActive,
 } from "react-icons/md";
 
-const AddressBox = ({ route, setToggleGeocoding, profile, setProfile }) => {
+const AddressBox = ({ route, setToggleGeocoding, profile, setProfile, map }) => {
   const dispatch = useDispatch();
   const { waypoints } = useSelector((state) => state.map);
   const controls = useAnimation();
@@ -96,11 +96,10 @@ const AddressBox = ({ route, setToggleGeocoding, profile, setProfile }) => {
               <div className="flex items-center p-2 w-[300px] gap-2 ml-[5px] h-full">
                 <button
                   title="Car"
-                  className={`p-3 rounded-full  transition-all duration-200  ${
-                    profile === "auto"
+                  className={`p-3 rounded-full  transition-all duration-200  ${profile === "auto"
                       ? "text-[#A91CD8] "
                       : " hover:text-[#b8a5be]"
-                  }`}
+                    }`}
                   onClick={() => setProfile("auto")}
                 >
                   <MdDirections className="text-2xl" />
@@ -108,11 +107,10 @@ const AddressBox = ({ route, setToggleGeocoding, profile, setProfile }) => {
 
                 <button
                   title="Motor Scooter"
-                  className={`p-3 rounded-full transition-all duration-200 ${
-                    profile === "motor_scooter"
+                  className={`p-3 rounded-full transition-all duration-200 ${profile === "motor_scooter"
                       ? "  text-[#A91CD8] "
                       : " hover:text-[#b8a5be]"
-                  }`}
+                    }`}
                   onClick={() => setProfile("motor_scooter")}
                 >
                   <MdDirectionsCarFilled className="text-2xl" />
@@ -120,11 +118,10 @@ const AddressBox = ({ route, setToggleGeocoding, profile, setProfile }) => {
 
                 <button
                   title="Pedestrian"
-                  className={`p-3 rounded-full  transition-all duration-200 ${
-                    profile === "pedestrian"
+                  className={`p-3 rounded-full  transition-all duration-200 ${profile === "pedestrian"
                       ? "  text-[#A91CD8] "
                       : " hover:text-[#b8a5be]"
-                  }`}
+                    }`}
                   onClick={() => setProfile("pedestrian")}
                 >
                   <MdDirectionsWalk className="text-2xl" />
@@ -132,11 +129,10 @@ const AddressBox = ({ route, setToggleGeocoding, profile, setProfile }) => {
 
                 <button
                   title="Bicycle"
-                  className={`p-3 rounded-full  transition-all duration-200 ${
-                    profile === "bicycle"
+                  className={`p-3 rounded-full  transition-all duration-200 ${profile === "bicycle"
                       ? "  text-[#A91CD8] "
                       : " hover:text-[#b8a5be]"
-                  }`}
+                    }`}
                   onClick={() => setProfile("bicycle")}
                 >
                   <Bike className="text-2xl" />
@@ -144,11 +140,10 @@ const AddressBox = ({ route, setToggleGeocoding, profile, setProfile }) => {
 
                 <button
                   title="Multimodal"
-                  className={`p-3 rounded-full  transition-all duration-200 ${
-                    profile === "multimodal"
+                  className={`p-3 rounded-full  transition-all duration-200 ${profile === "multimodal"
                       ? "  text-[#A91CD8] "
                       : " hover:text-[#b8a5be]"
-                  }`}
+                    }`}
                   onClick={() => setProfile("multimodal")}
                 >
                   <MdOutlineAirplanemodeActive className="text-2xl" />
@@ -174,6 +169,7 @@ const AddressBox = ({ route, setToggleGeocoding, profile, setProfile }) => {
                 transition={{ delay: index * 0.1 + 0.5 }}
               >
                 <AddressInput
+                  map={map}
                   location={waypoint.placeName}
                   index={index}
                   waypoint={waypoint}

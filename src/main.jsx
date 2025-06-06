@@ -10,14 +10,14 @@ import { ThemeProvider } from "@/pages/dashboard/theme-provider";
 
 createRoot(document.getElementById("root")).render(
   // <StrictMode>
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <ThemeProvider  storageKey="vite-ui-theme">
-          <App />
-          {/* <MapComponent/> */}
-        </ThemeProvider>
-      </PersistGate>
-    </Provider>
+  <Provider store={store}>
+    <PersistGate loading={null} persistor={persistor}>
+      <ThemeProvider storageKey="vite-ui-theme">
+        <App />
+        {/* <MapComponent/> */}
+      </ThemeProvider>
+    </PersistGate>
+  </Provider>
   // </StrictMode>
 );
 

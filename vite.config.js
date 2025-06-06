@@ -9,6 +9,7 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  fastRefresh: false,
   server: {
     hmr: true,
   },

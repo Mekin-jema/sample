@@ -65,9 +65,8 @@ const CategoryScroll = ({
 
   return (
     <div
-      className={`fixed ${
-        state === "collapsed" ? "  md:w-[800px]" : "md:w-[580px]"
-      } right-3 lg:top-5 top-16 w-full `}
+      className={`fixed ${state === "collapsed" ? "  md:w-[800px]" : "md:w-[580px]"
+        } right-3 lg:top-5 top-16 w-full z-50 `}
       ref={containerRef}
     >
       {showLeft && (
@@ -89,14 +88,13 @@ const CategoryScroll = ({
           <button
             key={category.name}
             onClick={() => handleCategoryClick(category)}
-            className={`flex-shrink-0 flex items-center px-3 py-1 border border-[#00432F] space-x-2 rounded-full ${
-              activeCategory === category.name
+            className={`flex-shrink-0 flex items-center px-3 py-1 border border-[#00432F] space-x-2 rounded-full ${activeCategory === category.name
                 ? "bg-[#00432F] text-white"
                 : "bg-white text-black"
-            }`}
+              }`}
             disabled={loading}
           >
-            <category.IconComponent size={16} color="#62666B" />
+            <category.IconComponent size={16} />
             <span className="text-sm">{category.name}</span>
           </button>
         ))}

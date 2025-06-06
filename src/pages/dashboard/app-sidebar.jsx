@@ -20,7 +20,7 @@ export function AppSidebar({ ...props }) {
     >
       {/* Conditionally render logo only when sidebar is expanded */}
       {state !== "collapsed" ? (
-        <div className="flex justify-center items-center h-[70px]">
+        <div className="flex justify-center items-center h-[60px]">
           <img src={logo} alt="logo image" className="mt-2 w-[98.3px] h-full" />
         </div>
       ) : (

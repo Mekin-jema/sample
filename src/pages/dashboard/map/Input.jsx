@@ -21,6 +21,7 @@ import { setOpen, setWaypoints } from "../../../Redux/MapSlice"; // Redux action
 import start from "../../../assets/POI/start.svg"; // Icon for start point
 import end from "../../../assets/POI/end.svg"; // Icon for end point
 import { getOptimizedRouteWithStops, getPlaces } from "./api";
+import { addUpdatedValhalla } from "./utils/add-updated-valhalla";
 
 /**
  * AddressInput Component
@@ -33,11 +34,11 @@ import { getOptimizedRouteWithStops, getPlaces } from "./api";
  * @returns {JSX.Element} - The rendered component.
  */
 export default function AddressInput({
+  map,
   setAddress,
   placeholder,
   index,
   location,
-
 }) {
   const [suggestions, setSuggestions] = useState([]); // State for address suggestions
   const [inputValue, setInputValue] = useState(location || ""); // State for input value
@@ -65,13 +66,10 @@ export default function AddressInput({
   /**
    * Handle deletion of the current waypoint.
    */
-  const handleDeleteInput = async() => {
+  const handleDeleteInput = async () => {
     const updatedWaypoints = waypoints.filter((waypoint, i) => i !== index);
     dispatch(setWaypoints(updatedWaypoints));
 
-
-          
-    
   };
 
   /**
@@ -91,37 +89,32 @@ export default function AddressInput({
    * @param {number[]} suggestion.center - The coordinates of the place.
    */
   const handleSelectSuggestion = (suggestion) => {
-  const {lat,lon,name,display_name} = suggestion;
+    const { lat, lon, name, display_name } = suggestion;
 
+    const address = {
+      placeName: display_name,
+      longitude: lon,
+      latitude: lat,
+    };
 
-
-  const address = {
-    placeName: display_name,
-    longitude: lon,
-    latitude: lat,
-  };
-  setAddress(address); // Update parent state
-  
+    setAddress(address); // Update parent state
 
     setSuggestions([]);
     setInputValue(display_name);
   };
 
-const handleClearInput = () => {
-  setInputValue("");
-  setSuggestions([]);
-  const updatedWaypoints = [...waypoints];
-  updatedWaypoints[index] = {
-    placeName: "",
-    longitude: null,
-    latitude: null,
+  const handleClearInput = () => {
+    setInputValue("");
+    setSuggestions([]);
+    const updatedWaypoints = [...waypoints];
+    updatedWaypoints[index] = {
+      placeName: "",
+      longitude: null,
+      latitude: null,
+    };
+    dispatch(setWaypoints(updatedWaypoints));
+    addUpdatedValhalla(map, valhallaRoute, waypoints, dispatch, profile);
   };
-  dispatch(setWaypoints(updatedWaypoints))
-  addUpdatedValhalla(map, valhallaRoute,waypoints,dispatch,profile);    
-
-
-
-}
   return (
     <div className="relative p-2 w-full flex items-center gap-1 ml-[30px] group">
       {/* Start or End Icon */}
@@ -185,5 +178,4 @@ const handleClearInput = () => {
       )}
     </div>
   );
-  
 }

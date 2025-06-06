@@ -155,15 +155,14 @@ const RenderDirectionDetail = ({ map, route }) => {
               return (
                 <div
                   key={idx}
-                  className={`py-4 px-4 dark:hover:bg-[#26645c] hover:bg-slate-200 cursor-pointer transition-colors ${
-                    waypoints.some(
-                      (wp) =>
-                        wp.latitude === step.maneuver.location[1] &&
-                        wp.longitude === step.maneuver.location[0]
-                    )
-                      ? "bg-primary/10"
-                      : ""
-                  }`}
+                  className={`py-4 px-4 dark:hover:bg-[#26645c] hover:bg-slate-200 cursor-pointer transition-colors ${waypoints.some(
+                    (wp) =>
+                      wp.latitude === step.maneuver.location[1] &&
+                      wp.longitude === step.maneuver.location[0]
+                  )
+                    ? "bg-primary/10"
+                    : ""
+                    }`}
                   onClick={() => handleStepClick(step)}
                 >
                   <div className="flex items-center gap-3">
