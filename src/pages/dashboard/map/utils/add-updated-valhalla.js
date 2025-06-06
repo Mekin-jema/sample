@@ -41,6 +41,13 @@ export const addUpdatedValhalla = (map, data, waypoints, dispatch, profile) => {
   }
 
   // Remove existing markers with fade-out effect
+  markers.forEach((marker) => {
+    const el = marker.getElement();
+    el.style.transition = "opacity 0.3s ease-out";
+    el.style.opacity = "0";
+    setTimeout(() => marker.remove(), 300);
+  });
+  markers = [];
 
   markers = [];
 
@@ -284,27 +291,27 @@ function drawRoute(map, profile) {
   };
 
   // Add subtle glow effect
-  const glowLayer = {
-    id: "route-glow",
-    type: "line",
-    source: "route",
-    layout: style.layout,
-    paint: {
-      "line-color": style.paint["line-color"],
-      "line-width": style.paint["line-width"].map((val, idx) =>
-        idx % 2 === 1 ? val + 4 : val
-      ),
-      "line-opacity": 0.2,
-      "line-blur": 5,
-    },
-    filter: ["==", "$type", "LineString"],
-  };
+  // const glowLayer = {
+  //   id: "route-glow",
+  //   type: "line",
+  //   source: "route",
+  //   layout: style.layout,
+  //   paint: {
+  //     "line-color": style.paint["line-color"],
+  //     "line-width": style.paint["line-width"].map((val, idx) =>
+  //       idx % 2 === 1 ? val + 4 : val
+  //     ),
+  //     "line-opacity": 0.2,
+  //     "line-blur": 5,
+  //   },
+  //   filter: ["==", "$type", "LineString"],
+  // };
 
   // Remove old glow layer if exists
-  if (map.getLayer("route-glow")) map.removeLayer("route-glow");
+  // if (map.getLayer("route-glow")) map.removeLayer("route-glow");
 
   // Add glow layer first
-  map.addLayer(glowLayer);
+  // map.addLayer(glowLayer);
 
   // Profile-specific styling
   switch (profile) {
