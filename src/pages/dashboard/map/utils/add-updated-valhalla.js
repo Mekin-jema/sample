@@ -72,14 +72,14 @@ export const addUpdatedValhalla = (map, data, waypoints, dispatch, profile) => {
 
     // Enhanced marker styling
     const el = marker.getElement();
-    // el.style.boxShadow = "0 2px 6px rgba(0, 0, 0, 0.3)";
-    // el.style.borderRadius = "50%";
-    // el.style.width = "24px";
-    // el.style.height = "24px";
-    // el.style.transition = "all 0.2s ease";
-    // el.style.display = "flex";
-    // el.style.justifyContent = "center";
-    // el.style.alignItems = "center";
+    el.style.boxShadow = "0 2px 6px rgba(0, 0, 0, 0.3)";
+    el.style.borderRadius = "50%";
+    el.style.width = "24px";
+    el.style.height = "24px";
+    el.style.transition = "all 0.2s ease";
+    el.style.display = "flex";
+    el.style.justifyContent = "center";
+    el.style.alignItems = "center";
 
     // Add inner white circle for better visibility
     const innerCircle = document.createElement("div");
@@ -91,17 +91,17 @@ export const addUpdatedValhalla = (map, data, waypoints, dispatch, profile) => {
     el.appendChild(innerCircle);
 
     // Add number for intermediate points
-    if (!isStart && !isEnd) {
-      const number = document.createElement("div");
-      number.style.position = "absolute";
-      number.style.color = markerColor;
-      number.style.fontSize = "10px";
-      number.style.fontWeight = "bold";
-      number.textContent = index.toString();
-      el.appendChild(number);
-    }
+    // if (!isStart && !isEnd) {
+    //   const number = document.createElement("div");
+    //   number.style.position = "absolute";
+    //   number.style.color = markerColor;
+    //   number.style.fontSize = "10px";
+    //   number.style.fontWeight = "bold";
+    //   number.textContent = index.toString();
+    //   el.appendChild(number);
+    // }
 
-    // // Hover effects
+    // Hover effects
     // el.addEventListener("mouseenter", () => {
     //   el.style.transform = "scale(1.2)";
     //   el.style.zIndex = "1000";
@@ -289,33 +289,33 @@ function drawRoute(map, profile) {
   };
 
   // Add subtle glow effect
-  // const glowLayer = {
-  //   id: "route-glow",
-  //   type: "line",
-  //   source: "route",
-  //   layout: style.layout,
-  //   paint: {
-  //     "line-color": style.paint["line-color"],
-  //     "line-width": style.paint["line-width"].map((val, idx) =>
-  //       idx % 2 === 1 ? val + 4 : val
-  //     ),
-  //     "line-opacity": 0.2,
-  //     "line-blur": 5,
-  //   },
-  //   filter: ["==", "$type", "LineString"],
-  // };
+  const glowLayer = {
+    id: "route-glow",
+    type: "line",
+    source: "route",
+    layout: style.layout,
+    paint: {
+      "line-color": style.paint["line-color"],
+      "line-width": style.paint["line-width"].map((val, idx) =>
+        idx % 2 === 1 ? val + 4 : val
+      ),
+      "line-opacity": 0.2,
+      "line-blur": 5,
+    },
+    filter: ["==", "$type", "LineString"],
+  };
 
   // Remove old glow layer if exists
-  // if (map.getLayer("route-glow")) map.removeLayer("route-glow");
+  if (map.getLayer("route-glow")) map.removeLayer("route-glow");
 
   // Add glow layer first
-  // map.addLayer(glowLayer);
+  map.addLayer(glowLayer);
 
   // Profile-specific styling
   switch (profile) {
     case "bicycle":
       style.paint = {
-        "line-color": "#6200EE",
+        "line-color": "#00BFA5",
         "line-width": [
           "interpolate",
           ["linear"],
@@ -333,7 +333,7 @@ function drawRoute(map, profile) {
       break;
     case "pedestrian":
       style.paint = {
-        "line-color": "#6200EE",
+        "line-color": "#FF6D00",
         "line-width": [
           "interpolate",
           ["linear"],
@@ -368,7 +368,7 @@ function drawRoute(map, profile) {
       break;
     case "transit":
       style.paint = {
-        "line-color": "#6200EE",
+        "line-color": "#2962FF",
         "line-width": [
           "interpolate",
           ["linear"],
@@ -386,7 +386,7 @@ function drawRoute(map, profile) {
       break;
     case "multimodal":
       style.paint = {
-        "line-color": "#6200EE",
+        "line-color": "#AA00FF",
         "line-width": [
           "interpolate",
           ["linear"],
@@ -509,13 +509,13 @@ function drawRoute(map, profile) {
           18,
           12,
         ]);
-        map.setPaintProperty("points-pulse", "circle-opacity", 0.5);
-        // animatePulse();
+        map.setPaintProperty("points-pulse", "circle-opacity", 0);
+        animatePulse();
       }, 2000);
     }, 0);
   }
 
-  // animatePulse();
+  animatePulse();
 }
 
 function addLayerEvents(map) {
