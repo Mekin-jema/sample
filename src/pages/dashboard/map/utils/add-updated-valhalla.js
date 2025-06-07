@@ -49,8 +49,6 @@ export const addUpdatedValhalla = (map, data, waypoints, dispatch, profile) => {
   });
   markers = [];
 
-  markers = [];
-
   // Loop through waypoints and create draggable markers
   waypoints.forEach((waypoint, index) => {
     const isStart = index === 0;
@@ -512,12 +510,12 @@ function drawRoute(map, profile) {
           12,
         ]);
         map.setPaintProperty("points-pulse", "circle-opacity", 0.5);
-        animatePulse();
+        // animatePulse();
       }, 2000);
     }, 0);
   }
 
-  animatePulse();
+  // animatePulse();
 }
 
 function addLayerEvents(map) {

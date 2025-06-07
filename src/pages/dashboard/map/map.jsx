@@ -61,7 +61,6 @@ const Map = () => {
   const [route, setRoute] = useState(null);
   const [map, setMap] = useState(null);
   const [pois, setPois] = useState([]);
-  const [trafficData, setTrafficData] = useState([]);
   const [activeCategory, setActiveCategory] = useState(null);
   const [loading, setLoading] = useState(false);
   const [toggleGeocoding, setToggleGeocoding] = useState(false);
@@ -72,11 +71,8 @@ const Map = () => {
   const [showElevationProfile, setShowElevationProfile] = useState(false);
   const [showMapStyles, setShowMapStyles] = useState(false);
   const [isElevationExpanded, setIsElevationExpanded] = useState(false);
-  const [userLocation, setUserLocation] = useState(null);
-  const [showRouteSummary, setShowRouteSummary] = useState(false);
   const [is3DView, setIs3DView] = useState(false);
   const [bearing, setBearing] = useState(0);
-  // const [showTraffic, setShowTraffic] = useState(false);
   const [currentPositionMarker, setCurrentPositionMarker] = useState(null);
   const { state } = useSidebar();
   const dispatch = useDispatch();
@@ -381,6 +377,7 @@ const Map = () => {
       }
 
       const elevationProfile = calculateElevationProfileData(routeResult);
+      console.log("Elevation Profile Data:", elevationProfile);
       setElevationData(elevationProfile);
 
       // // Show route summary
@@ -401,7 +398,6 @@ const Map = () => {
       // }
     } catch (err) {
       console.error("Error fetching route:", err);
-      toast.error("Failed to calculate route elevation");
     }
   };
 
@@ -412,34 +408,7 @@ const Map = () => {
     }
   }, [mapStyle]);
 
-  // Debounced route calculation
-  const calculateRoute = useCallback(
-    debounce(async (waypoints, profile) => {
-      if (!map || waypoints.length < 2) return;
-
-      const isValidWaypoints = waypoints.every(
-        (wp) => wp.latitude !== null && wp.longitude !== null
-      );
-      if (!isValidWaypoints) return;
-
-      try {
-        const valhallaRoute = await getDefaultRoute(waypoints, profile);
-        const routesInfo = await getRouteInfo(waypoints);
-        setRoute(routesInfo.routes[0]);
-        addUpdatedValhalla(map, valhallaRoute, waypoints, dispatch, profile);
-
-        // Calculate elevation for the new route
-        const elevationProfile = await calculateRouteElevation(waypoints);
-        setElevationData(elevationProfile);
-      } catch (error) {
-        console.error("Error fetching routes:", error.message);
-        toast.error("Failed to calculate route");
-      }
-    }, 500),
-    [map, dispatch, mapStyle]
-  );
-
-  // Calculate route elevation
+  // Calculate route elevation - fixed version
   const calculateRouteElevation = async (waypoints) => {
     try {
       const newWayPoint = waypoints.map((wp) => ({
@@ -463,14 +432,43 @@ const Map = () => {
         return [];
       }
 
-      return calculateElevationProfileData(routeResult);
+      // Process the elevation data
+      const elevationData = calculateElevationProfileData(routeResult);
+      return elevationData;
     } catch (err) {
       console.error("Error fetching elevation:", err);
-      toast.error("Failed to calculate elevation profile");
       return [];
     }
   };
 
+  // Then in your calculateRoute function, update the elevation handling:
+  const calculateRoute = useCallback(
+    debounce(async (waypoints, profile) => {
+      if (!map || waypoints.length < 2) return;
+
+      const isValidWaypoints = waypoints.every(
+        (wp) => wp.latitude !== null && wp.longitude !== null
+      );
+      if (!isValidWaypoints) return;
+
+      try {
+        setLoading(true);
+        const valhallaRoute = await getDefaultRoute(waypoints, profile);
+        const routesInfo = await getRouteInfo(waypoints);
+        setRoute(routesInfo.routes[0]);
+        addUpdatedValhalla(map, valhallaRoute, waypoints, dispatch, profile);
+
+        // Calculate elevation for the new route
+        const elevationProfile = await calculateRouteElevation(waypoints);
+        setElevationData(elevationProfile);
+      } catch (error) {
+        console.error("Error fetching routes:", error.message);
+      } finally {
+        setLoading(false);
+      }
+    }, 500),
+    [map, dispatch, mapStyle]
+  );
   // Fetch and render routes when waypoints or profile changes
   useEffect(() => {
     calculateRoute(waypoints, profile);
@@ -567,7 +565,7 @@ const Map = () => {
       addPOILayerToMap(map, pois);
       // toast.success(`Loaded ${pois.length} ${category.name} locations`);
     } catch (error) {
-      toast.error(`Failed to load ${category.name} data`);
+      toast.error(` to load ${category.name} data`);
       console.error(`Error fetching ${category.name} data:`, error);
     } finally {
       setLoading(false);
@@ -582,6 +580,7 @@ const Map = () => {
     // toast.info(`Map style changed to ${style.name}`);
   };
 
+  console.log("elevationData", elevationData);
 
   // Reset map view
   const resetMapView = () => {
@@ -645,7 +644,7 @@ const Map = () => {
       </div>
 
       {/* Map controls */}
-      <div className="fixed  top-20 right-4 z-20 flex flex-col space-y-3">
+      <div className="fixed  top-32 right-4 z-20 flex flex-col space-y-3">
         {/* Location button */}
 
 
@@ -761,13 +760,14 @@ const Map = () => {
             <ResponsiveContainer width="100%" height="100%">
               <LineChart
                 data={elevationData}
+
                 margin={{ top: 10, right: 20, left: 0, bottom: 20 }}
               >
                 <defs>
-                  <linearGradient id="elevationGradient" x1="0" y1="0" x2="0" y2="1">
+                  {/* <linearGradient id="elevationGradient" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.8} />
                     <stop offset="95%" stopColor="#3b82f6" stopOpacity={0.1} />
-                  </linearGradient>
+                  </linearGradient> */}
                 </defs>
                 <CartesianGrid
                   strokeDasharray="3 3"
@@ -819,28 +819,16 @@ const Map = () => {
                     </span>
                   )}
                 />
-                <Area
+                <Line
                   type="monotone"
                   dataKey="elevation"
                   stroke="#3b82f6"
                   fillOpacity={1}
                   fill="url(#elevationGradient)"
                   strokeWidth={2}
-                  activeDot={{ r: 6, stroke: '#1d4ed8', strokeWidth: 2 }}
-                />
-                <ReferenceLine
-                  y={elevationData[0]?.elevation}
-                  stroke="#10b981"
-                  strokeDasharray="3 3"
-                  label="Start"
-                />
-                <ReferenceLine
-                  y={elevationData[elevationData.length - 1]?.elevation}
-                  stroke="#ef4444"
-                  strokeDasharray="3 3"
-                  label="End"
                 />
               </LineChart>
+
             </ResponsiveContainer>
           </CardContent>
         </Card>

@@ -40,7 +40,6 @@ import Otp from "./pages/auth/otp/route";
 // Error page
 import NotFoundError from "./pages/error/404";
 import UserUpdate from "./pages/dashboard/team-management/update/update";
-import MapWithElevation from "./pages/dashboard/map/sample-map";
 import Home from "./pages";
 
 const router = createBrowserRouter([
