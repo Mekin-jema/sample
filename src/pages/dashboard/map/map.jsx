@@ -189,10 +189,10 @@ const Map = () => {
       { onAdd: () => toggle3DButton, onRemove: () => { } },
       "bottom-right"
     );
-    // mapInstance.current.addControl(
-    //   { onAdd: () => toggle3DButton, onRemove: () => { } },
-    //   "top-right"
-    // );
+    mapInstance.current.addControl(
+      { onAdd: () => toggle3DButton, onRemove: () => { } },
+      "bottom-right"
+    );
 
     // Add satellite view button
     const satelliteButton = createControlButton(

@@ -65,7 +65,7 @@ const CategoryScroll = ({
 
   return (
     <div
-      className={`fixed ${state === "collapsed" ? "  md:w-[800px]" : "md:w-[580px]"
+      className={`fixed ${state === "collapsed" ? "  md:w-[800px]" : "md:w-[600px]"
         } right-3 lg:top-5 top-16 w-full z-50 `}
       ref={containerRef}
     >
@@ -89,8 +89,8 @@ const CategoryScroll = ({
             key={category.name}
             onClick={() => handleCategoryClick(category)}
             className={`flex-shrink-0 flex items-center px-3 py-1 border border-[#00432F] space-x-2 rounded-full ${activeCategory === category.name
-                ? "bg-[#00432F] text-white"
-                : "bg-white text-black"
+              ? "bg-[#00432F] text-white"
+              : "bg-white text-black"
               }`}
             disabled={loading}
           >
