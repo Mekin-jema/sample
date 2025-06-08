@@ -20,6 +20,12 @@ const mapSlice = createSlice({
     setOpen: (state, action) => {
       state.open = action.payload;
     },
+    clearWaypoints(state) {
+      state.waypoints = [
+        { placeName: "", longitude: null, latitude: null },
+        { placeName: "", longitude: null, latitude: null },
+      ];
+    },
     // setRoute: (state, action) => {
     //   state.route = action.payload;
     // },
@@ -29,6 +35,6 @@ const mapSlice = createSlice({
   },
 });
 
-export const { setWaypoints, setOpen } = mapSlice.actions;
+export const { setWaypoints, clearWaypoints, setOpen } = mapSlice.actions;
 
 export default mapSlice.reducer;

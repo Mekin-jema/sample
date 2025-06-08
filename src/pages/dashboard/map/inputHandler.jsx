@@ -1,56 +1,40 @@
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { setWaypoints } from "../../../Redux/MapSlice";
+import { setWaypoints, clearWaypoints } from "../../../Redux/MapSlice";
 import AddressInput from "./Input";
 import RenderDirectionDetail from "./drectionDetail";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { motion, useAnimation } from "framer-motion";
 import { useEffect } from "react";
-import { Car, Bus, MapPin, X, Bike, Plus } from "lucide-react";
+import { Bike } from "lucide-react";
 import {
   MdDirections,
   MdDirectionsCarFilled,
-  MdDirectionsTransitFilled,
   MdDirectionsWalk,
   MdOutlineAirplanemodeActive,
 } from "react-icons/md";
+import { X, Plus } from "lucide-react";
 
 const AddressBox = ({ route, setToggleGeocoding, profile, setProfile, map }) => {
   const dispatch = useDispatch();
   const { waypoints } = useSelector((state) => state.map);
   const controls = useAnimation();
 
-  console.log(route);
   useEffect(() => {
-    // Start with the infinite pulse animation
     controls.start({
       scale: [1, 1.02, 1],
       opacity: [0.8, 1, 0.8],
-      transition: {
-        duration: 1.5,
-        repeat: Infinity,
-        ease: "easeInOut",
-      },
+      transition: { duration: 1.5, repeat: Infinity, ease: "easeInOut" },
     });
 
-    // After 2 seconds, transition to the final state
     const timer = setTimeout(() => {
-      controls.start({
-        scale: 1,
-        opacity: 1,
-        transition: {
-          duration: 0.5,
-          ease: "easeOut",
-        },
-      });
+      controls.start({ scale: 1, opacity: 1, transition: { duration: 0.5, ease: "easeOut" } });
     }, 2000);
 
     return () => clearTimeout(timer);
   }, [controls]);
 
-  // Add a new waypoint
   const addWaypoint = () => {
     const lastWaypoint = waypoints[waypoints.length - 1];
     if (
@@ -58,13 +42,10 @@ const AddressBox = ({ route, setToggleGeocoding, profile, setProfile, map }) => 
       lastWaypoint.longitude === null ||
       lastWaypoint.latitude === null
     ) {
-      toast.error(
-        "Please complete the previous waypoint before adding a new one.",
-        {
-          position: "top-center",
-          autoClose: 3000,
-        }
-      );
+      toast.error("Please complete the previous waypoint before adding a new one.", {
+        position: "top-center",
+        autoClose: 3000,
+      });
       return;
     }
     dispatch(
@@ -75,11 +56,55 @@ const AddressBox = ({ route, setToggleGeocoding, profile, setProfile, map }) => 
     );
   };
 
-  // Update a specific waypoint
   const updateWaypoint = (index, address) => {
     const updatedWaypoints = [...waypoints];
     updatedWaypoints[index] = address;
     dispatch(setWaypoints(updatedWaypoints));
+  };
+
+  // New close handler to clear waypoints and close UI
+  const handleClose = () => {
+    dispatch(clearWaypoints());
+    setToggleGeocoding(false);
+
+    if (!map) return;
+
+    // List of all possible route-related layers to remove
+    const routeLayers = [
+      'route-layer',
+      'route-glow',
+      'points-layer',
+      'points-pulse'
+    ];
+
+    // List of all possible route-related sources to remove
+    const routeSources = [
+      'route',
+      'points'
+    ];
+
+    // Remove layers
+    routeLayers.forEach(layer => {
+      if (map.getLayer(layer)) {
+        map.removeLayer(layer);
+      }
+    });
+
+    // Remove sources
+    routeSources.forEach(source => {
+      if (map.getSource(source)) {
+        map.removeSource(source);
+      }
+    });
+
+    // Clear markers with animation
+    markers.forEach(marker => {
+      const el = marker.getElement();
+      el.style.transition = "opacity 0.3s ease-out";
+      el.style.opacity = "0";
+      setTimeout(() => marker.remove(), 300);
+    });
+    markers = [];
   };
 
   return (
@@ -97,8 +122,8 @@ const AddressBox = ({ route, setToggleGeocoding, profile, setProfile, map }) => 
                 <button
                   title="Car"
                   className={`p-3 rounded-full  transition-all duration-200  ${profile === "auto"
-                      ? "text-[#A91CD8] "
-                      : " hover:text-[#b8a5be]"
+                    ? "text-[#A91CD8] "
+                    : " hover:text-[#b8a5be]"
                     }`}
                   onClick={() => setProfile("auto")}
                 >
@@ -108,8 +133,8 @@ const AddressBox = ({ route, setToggleGeocoding, profile, setProfile, map }) => 
                 <button
                   title="Motor Scooter"
                   className={`p-3 rounded-full transition-all duration-200 ${profile === "motor_scooter"
-                      ? "  text-[#A91CD8] "
-                      : " hover:text-[#b8a5be]"
+                    ? "  text-[#A91CD8] "
+                    : " hover:text-[#b8a5be]"
                     }`}
                   onClick={() => setProfile("motor_scooter")}
                 >
@@ -119,8 +144,8 @@ const AddressBox = ({ route, setToggleGeocoding, profile, setProfile, map }) => 
                 <button
                   title="Pedestrian"
                   className={`p-3 rounded-full  transition-all duration-200 ${profile === "pedestrian"
-                      ? "  text-[#A91CD8] "
-                      : " hover:text-[#b8a5be]"
+                    ? "  text-[#A91CD8] "
+                    : " hover:text-[#b8a5be]"
                     }`}
                   onClick={() => setProfile("pedestrian")}
                 >
@@ -130,8 +155,8 @@ const AddressBox = ({ route, setToggleGeocoding, profile, setProfile, map }) => 
                 <button
                   title="Bicycle"
                   className={`p-3 rounded-full  transition-all duration-200 ${profile === "bicycle"
-                      ? "  text-[#A91CD8] "
-                      : " hover:text-[#b8a5be]"
+                    ? "  text-[#A91CD8] "
+                    : " hover:text-[#b8a5be]"
                     }`}
                   onClick={() => setProfile("bicycle")}
                 >
@@ -141,8 +166,8 @@ const AddressBox = ({ route, setToggleGeocoding, profile, setProfile, map }) => 
                 <button
                   title="Multimodal"
                   className={`p-3 rounded-full  transition-all duration-200 ${profile === "multimodal"
-                      ? "  text-[#A91CD8] "
-                      : " hover:text-[#b8a5be]"
+                    ? "  text-[#A91CD8] "
+                    : " hover:text-[#b8a5be]"
                     }`}
                   onClick={() => setProfile("multimodal")}
                 >
@@ -152,14 +177,13 @@ const AddressBox = ({ route, setToggleGeocoding, profile, setProfile, map }) => 
 
               <button
                 title="Close"
-                onClick={() => setToggleGeocoding(false)}
-                className={`p-3 rounded-full  transition-all duration-200 
-                   hover:text-[#b8a5be]
-                  `}
+                onClick={handleClose}
+                className="p-3 rounded-full transition-all duration-200 hover:text-[#b8a5be]"
               >
                 <X width={25} height={25} />
               </button>
             </div>
+
             {waypoints.map((waypoint, index) => (
               <motion.div
                 key={index}
@@ -175,9 +199,7 @@ const AddressBox = ({ route, setToggleGeocoding, profile, setProfile, map }) => 
                   waypoint={waypoint}
                   setAddress={(address) => updateWaypoint(index, address)}
                   placeholder={
-                    index === 0
-                      ? "Starting Address"
-                      : `Destination Address ${index}`
+                    index === 0 ? "Starting Address" : `Destination Address ${index}`
                   }
                   className="w-full p-0 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
@@ -195,14 +217,12 @@ const AddressBox = ({ route, setToggleGeocoding, profile, setProfile, map }) => 
                 >
                   <button
                     title="Add Destination"
-                    className="rounded-full border-[2px] border-[#A91CD8] dark:border-white   flex items-center justify-center"
+                    className="rounded-full border-[2px] border-[#A91CD8] dark:border-white flex items-center justify-center"
                     onClick={addWaypoint}
                   >
                     <Plus className="w-5 h-5 text-[#A91CD8]" />
                   </button>
-                  <span className="text-lg ml-6 font-sora">
-                    Add destination
-                  </span>
+                  <span className="text-lg ml-6 font-sora">Add destination</span>
                 </motion.div>
               )}
           </CardContent>

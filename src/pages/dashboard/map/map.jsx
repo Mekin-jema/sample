@@ -187,7 +187,7 @@ const Map = () => {
 
     mapInstance.current.addControl(
       { onAdd: () => toggle3DButton, onRemove: () => { } },
-      "top-right"
+      "bottom-right"
     );
     // mapInstance.current.addControl(
     //   { onAdd: () => toggle3DButton, onRemove: () => { } },
@@ -467,12 +467,12 @@ const Map = () => {
         setLoading(false);
       }
     }, 500),
-    [map, dispatch, mapStyle]
+    [map, dispatch]
   );
   // Fetch and render routes when waypoints or profile changes
   useEffect(() => {
     calculateRoute(waypoints, profile);
-  }, [waypoints, profile, calculateRoute]);
+  }, [waypoints, profile, calculateRoute, mapStyle]);
 
   // Add POIs to map
   useEffect(() => {
