@@ -6,7 +6,10 @@ import { Provider } from "react-redux";
 import { persistor, store } from "./Redux/Store.js";
 import { PersistGate } from "redux-persist/integration/react";
 import { ThemeProvider } from "@/pages/dashboard/theme-provider";
+import setupPersistCleanupOnBrowserClose from "./Redux/clear-persist-onClose";
 // import MapComponent from "./pages/demo";
+
+setupPersistCleanupOnBrowserClose()
 
 createRoot(document.getElementById("root")).render(
   // <StrictMode>

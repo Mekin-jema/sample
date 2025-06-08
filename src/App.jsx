@@ -99,6 +99,8 @@ const router = createBrowserRouter([
   { path: "*", element: <Navigate to="/404" replace /> },
 ]);
 
+
+
 function App() {
   return <RouterProvider router={router} />;
 }
