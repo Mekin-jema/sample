@@ -1,25 +1,21 @@
 // utils/clearPersistOnClose.js
 function setupPersistCleanupOnBrowserClose() {
-  const LAST_OPEN_KEY = "last_opened";
-  const PERSIST_KEY = "persist:root";
-  const EXPIRY_MINUTES = 3; // Consider browser closed if not reopened within 3 mins
+  const SESSION_FLAG_KEY = "app_session_active";
 
-  const now = Date.now();
-  const lastOpen = parseInt(localStorage.getItem(LAST_OPEN_KEY), 10);
+  // Mark session as active on load
+  localStorage.setItem(SESSION_FLAG_KEY, "true");
 
-  // If lastOpen is old or not set → assume browser was closed
-  const minutesSinceLastOpen = (now - lastOpen) / 1000 / 60;
-  if (!lastOpen || minutesSinceLastOpen > EXPIRY_MINUTES) {
-    localStorage.removeItem(PERSIST_KEY);
-    console.log("Browser was closed. Redux state cleared.");
-  }
+  // When browser/tab is closed (not refreshed), remove persisted data
+  window.addEventListener("unload", () => {
+    // Remove session flag after short delay (indicates browser closed)
+    navigator.sendBeacon("/cleanup-session");
+    localStorage.removeItem(SESSION_FLAG_KEY);
+    localStorage.removeItem("persist:root"); // Remove redux-persist storage
+  });
 
-  // On page load, update timestamp
-  localStorage.setItem(LAST_OPEN_KEY, now.toString());
-
-  // Also update timestamp before unload (for tab switches/refresh)
-  window.addEventListener("beforeunload", () => {
-    localStorage.setItem(LAST_OPEN_KEY, Date.now().toString());
+  // On refresh: re-set the session flag (keeps data alive)
+  window.addEventListener("load", () => {
+    localStorage.setItem(SESSION_FLAG_KEY, "true");
   });
 }
 
