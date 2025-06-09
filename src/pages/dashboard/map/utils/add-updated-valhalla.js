@@ -315,7 +315,7 @@ function drawRoute(map, profile) {
   switch (profile) {
     case "bicycle":
       style.paint = {
-        "line-color": "#00BFA5",
+        "line-color": "#6200EE",
         "line-width": [
           "interpolate",
           ["linear"],
@@ -333,7 +333,7 @@ function drawRoute(map, profile) {
       break;
     case "pedestrian":
       style.paint = {
-        "line-color": "#FF6D00",
+        "line-color": "#6200EE",
         "line-width": [
           "interpolate",
           ["linear"],
@@ -368,7 +368,7 @@ function drawRoute(map, profile) {
       break;
     case "transit":
       style.paint = {
-        "line-color": "#2962FF",
+        "line-color": "#6200EE",
         "line-width": [
           "interpolate",
           ["linear"],
@@ -386,7 +386,7 @@ function drawRoute(map, profile) {
       break;
     case "multimodal":
       style.paint = {
-        "line-color": "#AA00FF",
+        "line-color": "#6200EE",
         "line-width": [
           "interpolate",
           ["linear"],
